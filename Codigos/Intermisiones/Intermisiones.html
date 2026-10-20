@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <!-- -------------------- SEO BÁSICO -------------------- -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> PicoDesk - Intermisión </title>
+
+    <!-- -------------------- FAVICON -------------------- -->
+
+        <link rel="icon" href="../../Recursos_Gráficos/Sprites/Icons/LOGO.ico">
+
+    <!-- -------------------- SEO REDES SOCIALES -------------------- -->
+
+        <meta og:title content="Intermisión de PicoDesk">
+        <meta og:description content="¡Estamos esperando a que te unas y aprendas a construir una computadora con nosotros!">
+        <meta og:image content="../Recursos_Gráficos/Sprites/LOGO.png">
+    
+    <!-- -------------------- ESTILOS -------------------- -->
+
+    <link rel="stylesheet" href="style.css">  <!-- link a los estilos. -->
+
+</head>
+
+<body>
+    <header>
+        <button id="salir"> MENÚ </button>
+        <h1> ¡Nivel <span id="numero-nivel">x</span> completado! </h1>
+    </header>
+    <div id="CorpusGeneral">  <!-- Corpus general de la página (puntaje, componente) -->
+
+        
+        <div id="ContainerPuntaje">
+            <h3> Resultado del nivel </h3>
+            <div id="Resultados">  <!-- Container de los resultados individuales: puntaje
+                                        y tiempo, en ese orden.
+
+                                        NUEVO: se sacó el bloque de "Finalizados" (usuarios
+                                        de la clase que ya terminaron) porque por ahora el
+                                        juego es de un solo jugador. Si en algún momento se
+                                        agrega un modo grupal, se puede volver a agregar acá
+                                        con la misma estructura que "Puntajes" de abajo. -->
+
+                <div class="Puntajes"> <!-- Puntaje individual -->
+                    <img src="../../Recursos_Gráficos/Sprites/Icons/Puntaje.png">
+                    <p> Puntaje: </p>
+                    <h2 id="valor-puntaje"> Aa </h2>
+                </div>
+                <div class="Puntajes"> <!-- Tiempo individual -->
+                    <img src="../../Recursos_Gráficos/Sprites/Icons/Tiempo.png">
+                    <p> Tiempo: </p>
+                    <h2 id="valor-tiempo"> Aa </h2>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="ContainerComponentes">
+            <div id="Componente">
+                <img src="../../Recursos_Gráficos/Sprites/CPU/CPU_Frente.png">
+                <textarea spellcheck="false" readonly> La CPU es el componente equivalente a nuestro cerebro. </textarea>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+<script src="IntermisionesIndex.js"></script>
+<!-- NUEVO: lee el resultado del nivel jugado (sessionStorage) y lo muestra -->
+<script src="resultados_intermision.js"></script>
+
+</html>
