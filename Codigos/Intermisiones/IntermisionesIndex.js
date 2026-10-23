@@ -6,7 +6,7 @@
 
 (function () {
   // Ruta relativa a la ubicación de IntermisionesIndex.html.
-  const RUTA_MENU_PRINCIPAL = "../Menú_Principal/index.html";
+  const RUTA_MENU_PRINCIPAL = "../Menú_Principal/MenúPrincipal.html";
 
   const botonMenu = document.getElementById("salir");
   if (!botonMenu) return;
