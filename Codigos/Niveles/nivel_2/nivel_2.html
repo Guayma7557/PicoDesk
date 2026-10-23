@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Nivel 2 - Transferencia de Datos</title>
+  <link rel="stylesheet" href="nivel_2.css" />
+</head>
+<body>
+
+  <!-- ========================================== -->
+  <!-- PANTALLA DE INTRODUCCIÓN (POP-UP)          -->
+  <!-- ========================================== -->
+  <div id="pantalla-intro" class="intro-overlay">
+    <div class="intro-contenido">
+      <div class="disco-cerrado-placeholder">💾</div>
+      <h1>¿Qué es la Memoria?</h1>
+      <p>
+        La memoria en las computadoras es la capacidad de <strong>preservar bits</strong> (unidades de información). 
+        El CPU procesa datos y los envía al disco para que no se pierdan.
+      </p>
+      <p class="instruccion-click">Haz clic en cualquier parte para empezar</p>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- CONTENEDOR PRINCIPAL DEL JUEGO             -->
+  <!-- ========================================== -->
+  <section id="juego-principal" class="pantalla-niveles oculto">
+    
+    <!-- Botón de salir y barra de progreso (Posicionados a la izquierda) -->
+    <div class="barra-lateral">
+      <button type="button" class="boton-salir" aria-label="Salir"></button>
+      <!-- DECISIÓN: El progreso usa una variable CSS (--progreso) que el JS actualiza 
+           para llenar la barra desde abajo hacia arriba. -->
+      <div class="barra-progreso" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Progreso del nivel">
+        <div class="barra-progreso__relleno" style="--progreso: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Panel de misión (Fijo a la derecha) -->
+    <aside class="panel-misiones">
+      <p class="mision-texto">replica el codigo binario {que envía el CPU para recordar}</p>
+      <p class="mision-rondas">Ronda: <span id="ronda-actual">1</span> / 5</p>
+    </aside>
+
+    <!-- Contenedor Superior: Código Binario -->
+    <!-- DECISIÓN: Usamos posicionamiento absoluto con top fijo para que el código 
+         siempre esté centrado horizontalmente en la parte superior. -->
+    <div class="contenedor-superior">
+      <div class="codigo-container">
+        <h2 id="codigo-objetivo">00000000</h2>
+      </div>
+    </div>
+
+    <!-- Contenedor Central: Espacio vacío para el disco -->
+    <!-- DECISIÓN: Al no haber sprite, dejamos este div vacío que ocupa todo el centro.
+         El fondo gris de la página actuará como el "disco girando" visualmente. -->
+    <div class="contenedor-disco"></div>
+
+    <!-- Contenedor Inferior: Input de Usuario -->
+    <div class="contenedor-inferior">
+      <div id="input-container" class="input-container">
+        <!-- DECISIÓN: Las "cages" tienen un atributo data-index para que el JS 
+             sepa exactamente qué caja rellenar cuando el jugador tipea. -->
+        <div class="cage" data-index="0"></div>
+        <div class="cage" data-index="1"></div>
+        <div class="cage" data-index="2"></div>
+        <div class="cage" data-index="3"></div>
+        <div class="cage" data-index="4"></div>
+        <div class="cage" data-index="5"></div>
+        <div class="cage" data-index="6"></div>
+        <div class="cage" data-index="7"></div>
+      </div>
+    </div>
+
+    <!-- Teclado en pantalla (Solo visible en pantallas táctiles por CSS) -->
+    <div id="teclado-movil" class="teclado-movil">
+      <button type="button" class="btn-tecla" data-key="0">0</button>
+      <button type="button" class="btn-tecla" data-key="1">1</button>
+      <button type="button" class="btn-tecla btn-borrar" data-key="Backspace">⌫</button>
+    </div>
+
+    <!-- Diálogo de confirmación de salida -->
+    <div class="overlay-confirmacion" aria-hidden="true">
+      <div class="dialogo-confirmacion" role="alertdialog" aria-modal="true">
+        <p class="dialogo-confirmacion__texto">¿Estás seguro de salir?</p>
+        <div class="dialogo-confirmacion__opciones">
+          <button type="button" class="dialogo-confirmacion__si">Si</button>
+          <button type="button" class="dialogo-confirmacion__no">No</button>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <script src="nivel_2.js"></script>
+</body>
+</html>
