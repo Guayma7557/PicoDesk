@@ -43,7 +43,7 @@
       cerrarDialogo();
     }
   }
-  const RUTA_MENU_PRINCIPAL = "../../Menú_Principal/index.html"; // Se busca por las carpetas el menú principal
+  const RUTA_MENU_PRINCIPAL = "../../Menú_Principal/MenúPrincipal.html"; // Se busca por las carpetas el menú principal
   function irAlMenuPrincipal() {
     window.location.href = RUTA_MENU_PRINCIPAL;
   }
