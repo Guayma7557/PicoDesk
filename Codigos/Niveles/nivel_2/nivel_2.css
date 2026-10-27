@@ -25,9 +25,25 @@ html, body {
   height: 100%;
   overflow: hidden;
   font-family: 'DotGothic16', sans-serif;
-  /* DECISIÓN: Usamos este gris de fondo para simular el color del disco girando */
-  background-color: #6b6b6b; 
+  /* CORRECCIÓN: el PNG del disco no es transparente, trae su propio fondo
+     gris (#939598 aprox.). Usamos ese mismo color acá para que no se note
+     el "recuadro" alrededor de la imagen y quede todo mimetizado. */
+  background-color: #939598;
   color: var(--ColorQuinto);
+
+  /* CORRECCIÓN: antes la imagen no tenía background-repeat, así que el
+     navegador la mosaiqueaba (tile) por defecto y se veían varios discos
+     en vez de uno solo. Con no-repeat + center queda una única imagen
+     centrada en la pantalla. */
+  background-image: url('../../../Recursos_Gráficos/Sprites/Transmisión_de_datos/Disco\ rotacion\ 1\ -\ Nivel\ 6.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  /* NUEVO: antes usaba "contain", que estira la imagen hasta ocupar toda
+     la pantalla. Ahora se fija un ancho chico (y "auto" en el alto deja
+     que el navegador mantenga la proporción original del PNG), así el
+     disco queda pequeño y centrado en vez de gigante. Ajustá el valor
+     "20rem" si lo querés aún más chico o más grande. */
+  background-size: min(50rem, 55vw) auto;
 }
 
 .oculto {
