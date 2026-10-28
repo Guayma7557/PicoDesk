@@ -1,142 +1,126 @@
 /* ==========================================================================
-   nivel_2.css
-   Estilos visuales y de estructura para el Nivel 2.
+   variables.css
+   Tokens de diseño: colores, tipografía y espaciados reutilizados
+   por el resto de los módulos.
    ========================================================================== */
-
-@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&display=swap');
 
 :root {
-  --ColorPrimario: #477F90;
-  --ColorSecundario: #A44545;
-  --ColorTerciario: #404040;
-  --ColorCuarto: #303030;
-  --ColorQuinto: #E8E7E4;
+  /* Colores base */
+  --color-fondo: #7b3bbb;
+  --color-boton: #a44545;
+  --color-boton-hover: #b85454;
+
+  /* Barra de progreso */
+  --color-progreso-vacio: #3a3a3a;
   --color-progreso-relleno: #e0b23d;
-  --fuente-titulos: "VT323", monospace;
-}
 
-*, *::before, *::after {
+  /* Tipografía pixel */
+  --fuente-pixel: "Press Start 2P", "Courier New", monospace;
+
+  /* Espaciados generales */
+  --espacio-borde: clamp(1rem, 2vw, 2.5rem);
+  --espacio-entre-controles: clamp(0.8rem, 1.5vh, 1.75rem);
+
+  /* Tamaño del botón triangular */
+  --ancho-boton-salir: clamp(1.75rem, 2.2vw, 3.25rem);
+  --alto-boton-salir: clamp(2.25rem, 2.9vw, 4.25rem);
+
+  /* Barra de progreso */
+  --ancho-barra-progreso: clamp(0.6rem, 1vw, 1rem);
+  --alto-barra-progreso: clamp(12rem, 55vh, 26rem);
+}
+/* ==========================================================================
+   base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   overflow: hidden;
-  font-family: 'DotGothic16', sans-serif;
-  /* CORRECCIÓN: el PNG del disco no es transparente, trae su propio fondo
-     gris (#939598 aprox.). Usamos ese mismo color acá para que no se note
-     el "recuadro" alrededor de la imagen y quede todo mimetizado. */
-  background-color: #939598;
-  color: var(--ColorQuinto);
-
-  /* CORRECCIÓN: antes la imagen no tenía background-repeat, así que el
-     navegador la mosaiqueaba (tile) por defecto y se veían varios discos
-     en vez de uno solo. Con no-repeat + center queda una única imagen
-     centrada en la pantalla. */
-  background-image: url('../../../Recursos_Gráficos/Sprites/Transmisión_de_datos/Disco\ rotacion\ 1\ -\ Nivel\ 6.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  /* NUEVO: antes usaba "contain", que estira la imagen hasta ocupar toda
-     la pantalla. Ahora se fija un ancho chico (y "auto" en el alto deja
-     que el navegador mantenga la proporción original del PNG), así el
-     disco queda pequeño y centrado en vez de gigante. Ajustá el valor
-     "20rem" si lo querés aún más chico o más grande. */
-  background-size: min(50rem, 55vw) auto;
 }
 
-.oculto {
-  display: none !important;
+body {
+  margin: 0;
+  font-family: var(--fuente-pixel);
 }
 
-/* ==========================================================================
-   PANTALLA DE INTRODUCCIÓN
-   ========================================================================== */
-.intro-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(48, 48, 48, 0.95);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+button {
+  font-family: inherit;
   cursor: pointer;
 }
 
-.intro-contenido {
-  background-color: var(--ColorTerciario);
-  border: 3px solid var(--ColorQuinto);
-  border-radius: 8px;
-  padding: 2rem;
-  max-width: 600px;
-  text-align: center;
-}
-
-.disco-cerrado-placeholder {
-  font-size: 5rem;
-  margin-bottom: 1rem;
-}
-
-.intro-contenido h1 {
-  font-family: var(--fuente-titulos);
-  font-size: 3rem;
-  color: var(--ColorPrimario);
-  margin-bottom: 1rem;
-}
-
-.intro-contenido p {
-  font-size: 1.2rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.instruccion-click {
-  color: var(--color-progreso-relleno);
-  animation: pulso 1.5s infinite;
-  font-weight: normal;
-}
-
 /* ==========================================================================
-   JUEGO PRINCIPAL
+   layout
    ========================================================================== */
+
 .pantalla-niveles {
   position: relative;
   width: 100vw;
   height: 100vh;
+  background-color: var(--color-fondo);
+  overflow: hidden;
 }
 
-/* 1. Botón Salir y Barra de Progreso (Izquierda) */
-.barra-lateral {
-  position: absolute;
-  top: 2rem;
-  left: 2rem;
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: center;
-}
+/* ==========================================================================
+   boton de salida
+   ========================================================================== */
 
 .boton-salir {
-  width: 3rem;
-  height: 4rem;
-  background-color: var(--ColorSecundario);
+  flex-shrink: 0;
+  width: var(--ancho-boton-salir);
+  height: var(--alto-boton-salir);
   border: none;
-  clip-path: polygon(100% 0%, 100% 100%, 0% 50%);
-  cursor: pointer;
-  transition: transform 0.1s;
-}
-.boton-salir:active { transform: scale(0.9); }
+  padding: 0;
+  background-color: var(--color-boton);
 
+  /* Triángulo */
+
+  clip-path: polygon(100% 0%, 100% 100%, 0% 50%);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.boton-salir:hover {
+  background-color: var(--color-boton-hover);
+}
+
+.boton-salir:active {
+  transform: scale(0.94);
+}
+
+.boton-salir:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 4px;
+}
+
+/* ==========================================================================
+   barra-lateral
+   ========================================================================== */
+
+.barra-lateral {
+  position: absolute;
+  top: var(--espacio-borde);
+  left: var(--espacio-borde);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-entre-controles);
+}
+
+/* Barra de progreso */
 .barra-progreso {
-  width: 1rem;
-  /* DECISIÓN: Le devolvemos la altura original (200px) para que sea más larga y visible */
-  height: 70vh; 
-  background-color: var(--ColorTerciario);
+  position: relative;
+  width: var(--ancho-barra-progreso);
+  height: var(--alto-barra-progreso);
+  background-color: var(--color-progreso-vacio);
   clip-path: polygon(0% 0%, 100% 3%, 100% 100%, 0% 96%);
   overflow: hidden;
-  position: relative;
 }
 
 .barra-progreso__relleno {
@@ -145,223 +129,491 @@ html, body {
   right: 0;
   bottom: 0;
   height: var(--progreso, 0%);
-  background-color: var(--ColorQuinto);
-  /* DECISIÓN: Esta transición hace que el llenado sea suave cuando el JS actualiza el % */
-  transition: height 0.3s ease;
+  background-color: var(--color-progreso-relleno);
 }
-
-/* 2. Panel de Misiones (Derecha) */
-.panel-misiones {
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  z-index: 10;
-  background-color: var(--ColorTerciario);
-  padding: 1rem 1.5rem;
-  border-radius: 8px;
-  max-width: 250px;
-}
-
-.mision-texto {
-  font-size: 1rem;
-  line-height: 1.4;
-  margin-bottom: 1rem;
-  text-align: right;
-}
-
-.mision-rondas {
-  font-family: var(--fuente-titulos);
-  font-size: 1.5rem;
-  color: var(--ColorQuinto);
-  text-align: center;
-}
-
-/* 3. Código Binario (Arriba) */
-.contenedor-superior {
-  position: absolute;
-  top: 2rem;
-  left: 50%;
-  /* DECISIÓN: Usamos translateX para centrar perfectamente el div sin importar su ancho */
-  transform: translateX(-50%);
-  z-index: 10;
-}
-
-.codigo-container {
-  background-color: var(--ColorTerciario);
-  padding: 1rem 3rem;
-  border-radius: 8px;
-}
-
-.codigo-container h2 {
-  font-family: var(--fuente-titulos);
-  font-size: 3.5rem;
-  letter-spacing: 0.8rem;
-  color: var(--ColorQuinto);
-}
-
-/* 4. Espacio del Disco (Centro) */
-.contenedor-disco {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none; /* Permite que los clics pasen a través de él */
-}
-
-/* 5. Inputs (Abajo) */
-.contenedor-inferior {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-}
-
-.input-container {
-  display: flex;
-  background-color: var(--ColorTerciario);
-  border-radius: 12px;
-  padding: 0.5rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  border: 3px solid transparent;
-}
-
-/* DECISIÓN: Estas clases las activa el JS para dar feedback visual inmediato */
-.input-container.error {
-  border-color: #e02424;
-  box-shadow: 0 0 15px rgba(224, 36, 36, 0.6);
-}
-
-.input-container.success {
-  border-color: #63ac63;
-  box-shadow: 0 0 20px rgba(71, 248, 71, 0.6);
-}
-
-.cage {
-  width: 3.5rem;
-  height: 4rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: var(--fuente-titulos);
-  font-size: 2.5rem;
-  color: var(--ColorQuinto);
-  
-  /* DECISIÓN: Fondo un poco más claro que el contenedor padre y borde sutil */
-  background-color: #555555; 
-  border-right: 2px solid #777777; 
-  position: relative;
-}
-
-.cage:last-child {
-  border-right: none;
-}
-
-/* El cursor parpadeante en la caja actual */
-.cage.vacio::before {
-  content: "|";
-  color: var(--ColorQuinto);
-  animation: parpadeo 1s infinite;
-  /* DECISIÓN: Posicionamiento absoluto y left: 0.5rem para correrlo a la izquierda */
-  position: absolute;
-  left: 0.5rem;
-}
-
-/* Teclado móvil - Por defecto oculto */
-.teclado-movil {
-  display: none;
-  gap: 1rem;
-  position: absolute;
-  bottom: 6rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-}
-
-.btn-tecla {
-  background-color: var(--ColorTerciario);
-  color: var(--ColorQuinto);
-  font-family: var(--fuente-titulos);
-  font-size: 2rem;
-  border: 2px solid var(--ColorQuinto);
-  border-radius: 8px;
-  width: 5rem;
-  height: 5rem;
-  cursor: pointer;
-}
-.btn-tecla:active { background-color: var(--ColorPrimario); }
-.btn-borrar { background-color: var(--ColorSecundario); }
-
 /* ==========================================================================
-   MEDIA QUERIES (Responsive para Móviles)
+   dialogo-confirmación
    ========================================================================== */
-@media (hover: none) and (pointer: coarse) {
-  .teclado-movil { display: flex; }
-  .codigo-container h2 { font-size: 2.5rem; letter-spacing: 0.5rem; }
-  .cage { width: 2.2rem; height: 3rem; font-size: 1.5rem; }
-  .panel-misiones {
-    top: auto; bottom: 2rem; right: 1rem; left: 1rem;
-    max-width: none; text-align: center;
-  }
-  .mision-texto { text-align: center; }
-  .contenedor-inferior { bottom: 12rem; }
-}
 
-/* Animaciones */
-@keyframes pulso {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.05); }
-}
-
-@keyframes parpadeo {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-/* ==========================================================================
-   DIÁLOGO DE CONFIRMACIÓN
-   ========================================================================== */
 .overlay-confirmacion {
   position: fixed;
   inset: 0;
-  display: none;
+  display: none; /* se activa agregando la clase ".is-visible" vía JS */
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.7);
-  z-index: 1000;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
 }
-.overlay-confirmacion.is-visible { display: flex; }
+
+.overlay-confirmacion.is-visible {
+  display: flex;
+}
+
 .dialogo-confirmacion {
-  background-color: var(--ColorTerciario);
-  border: 2px solid var(--ColorSecundario);
-  padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
   align-items: center;
+  gap: clamp(1.25rem, 3vh, 2rem);
+  max-width: min(90vw, 28rem);
+  padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 3rem);
+  background-color: #1a1a1a;
+  border: 2px solid var(--color-boton);
   text-align: center;
-  border-radius: 8px;
 }
+
 .dialogo-confirmacion__texto {
-  font-family: var(--fuente-titulos);
-  font-size: 2rem;
+  margin: 0;
+  color: #ffffff;
+  font-family: var(--fuente-pixel);
+  font-size: clamp(0.8rem, 1.4vw, 1.05rem);
+  line-height: 1.7;
 }
-.dialogo-confirmacion__opciones { display: flex; gap: 2rem; }
+
+.dialogo-confirmacion__opciones {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+/* Botón "No": rojo, con forma de botón -> es la opción visualmente fuerte */
 .dialogo-confirmacion__no {
-  background-color: var(--ColorSecundario);
-  color: white;
   border: none;
-  padding: 0.8rem 2rem;
-  font-family: 'DotGothic16', sans-serif;
-  font-size: 1.2rem;
+  padding: 0.65rem 1.6rem;
+  background-color: var(--color-boton);
+  color: #ffffff;
+  font-family: var(--fuente-pixel);
+  font-size: 0.8rem;
   cursor: pointer;
-  border-radius: 4px;
+  transition: background-color 0.15s ease, transform 0.15s ease;
 }
+
+.dialogo-confirmacion__no:hover {
+  background-color: var(--color-boton-hover);
+}
+
+.dialogo-confirmacion__no:active {
+  transform: scale(0.96);
+}
+
+.dialogo-confirmacion__no:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+/* Opción "Sí": texto plano, sin fondo ni borde, deliberadamente discreto */
 .dialogo-confirmacion__si {
   background: none;
   border: none;
-  color: #aaa;
-  font-family: 'DotGothic16', sans-serif;
-  font-size: 1rem;
+  padding: 0.4rem;
+  color: #7a7a7a;
+  font-family: var(--fuente-pixel);
+  font-size: 0.72rem;
   cursor: pointer;
+}
+
+.dialogo-confirmacion__si:hover,
+.dialogo-confirmacion__si:focus-visible {
+  color: #b0b0b0;
   text-decoration: underline;
+}
+
+.dialogo-confirmacion__si:focus-visible {
+  outline: none;
+}
+
+/* Botón triangular deshabilitado mientras el diálogo está abierto */
+.boton-salir:disabled {
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   fondo del nivel (secuencia "Fondo inclinado" -> "Fondo superior")
+   ========================================================================== */
+
+/* Marco a pantalla completa que respeta la proporción real de las imágenes
+   de fondo (521x260). Se ajusta al ancho o al alto de la ventana, lo que
+   toque primero, y queda centrado: así "Fondo superior" siempre se ve
+   completo y la zona interactiva (posicionada en % dentro de este marco)
+   calza con el dibujo sin importar el tamaño de pantalla. */
+.fondo-marco {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  max-width: calc(100vh * (521 / 260));
+  max-height: calc(100vw * (260 / 521));
+  aspect-ratio: 521 / 260;
+  z-index: 1;
+}
+
+.fondo-capa {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* "Fondo inclinado - Nivel 1": se muestra arriba de todo al entrar al
+   nivel y se desvanece a los 3s (ver secuencia_fondo_nivel_1.js). Se
+   estira un poco horizontalmente (es puramente decorativa, no tiene
+   ninguna zona interactiva encima) para que no queden franjas del fondo
+   del nivel asomando a los costados. */
+.fondo-inclinado {
+  z-index: 2;
+  opacity: 1;
+  transform: scaleX(1.06);
+  transition: opacity 1s ease;
+}
+
+.fondo-marco.nivel-listo .fondo-inclinado {
+  opacity: 0;
+}
+
+/* "Fondo superior - Nivel 1": arranca oculta y hace fade-in al mismo
+   tiempo que "Fondo inclinado" hace fade-out (cross-fade), quedando
+   como fondo fijo del nivel una vez terminada la transición. */
+.fondo-superior {
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.fondo-marco.nivel-listo .fondo-superior {
+  opacity: 1;
+}
+
+/* "Fondo superior - Nivel 2": ya trae la placa madre dibujada en su
+   posición y rotación final (encarada hacia la placa de puertos del
+   gabinete). Arranca oculta y hace fade-in reemplazando a
+   "Fondo superior - Nivel 1" apenas se coloca la placa madre (ver
+   ".fondo-marco.placa-madre-lista" más abajo, que va DESPUÉS en la hoja
+   para ganarle en cascada a la regla de arriba una vez que se agrega). */
+.fondo-superior-n2 {
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.fondo-marco.placa-madre-lista .fondo-superior-n2 {
+  opacity: 1;
+}
+
+.fondo-marco.placa-madre-lista .fondo-superior {
+  opacity: 0;
+}
+
+.zona-placa-madre {
+  position: absolute;
+  top: 14%;
+  left: 27%;
+  width: 10%;
+  height: 14%;
+  border: 3px solid #e02424;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none; /* se activa solo con la clase .zona-activa (JS) */
+  transition: opacity 1s ease;
+  z-index: 3;
+}
+
+/* El marco rojo y su etiqueta aparecen junto con "Fondo superior", no
+   antes: se revelan recién cuando termina la introducción. */
+.fondo-marco.nivel-listo .zona-placa-madre {
+  opacity: 1;
+}
+
+/* Mientras la herramienta "placa-madre" está seleccionada, o mientras se
+   la está arrastrando por encima, la zona acepta clicks/soltar y se
+   resalta para dar feedback visual de que es un destino válido. */
+.zona-placa-madre.zona-activa {
+  pointer-events: auto;
+  cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(224, 178, 61, 0.85);
+}
+
+/* Una vez colocada la placa (el fondo ya pasó a "Fondo superior - Nivel 2",
+   que la trae dibujada), el marco rojo y su etiqueta dejan de mostrarse. */
+.zona-placa-madre.placa-colocada {
+  border-color: transparent;
+}
+
+.zona-placa-madre.placa-colocada .zona-placa-madre__etiqueta {
+  display: none;
+}
+
+/* Los 5 puntos de fijación (tornillos). Arrancan invisibles: solo se
+   revelan una vez que la placa madre ya está colocada (ver la regla
+   ".zona-placa-madre.placa-colocada .punto-tornillo" más abajo). */
+.punto-presion {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border: 3px solid #e02424;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none; /* se activa solo con la clase .zona-activa (JS) */
+  z-index: 3;
+}
+
+/* Recién visibles y clickeables una vez que la placa madre está puesta. */
+.zona-placa-madre.placa-colocada .punto-presion {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 5 puntos de fijación: 4 en las esquinas de la placa madre y 1 en el
+   medio del borde derecho. Los % son relativos a .zona-placa-madre,
+   que ahora calza con el tamaño/posición real de la placa (ver
+   "Fondo superior - Nivel 2" como referencia de escala). */
+.punto-presion--1 { top: 50%;  left: 50%;  }
+
+/* Tornillo ya colocado (pendiente de apretar) */
+.punto-presion[data-colocado="true"] {
+  border-style: solid;
+  border-color: #cccccc00;
+  background-color: #4a4a4a;
+}
+
+/* Tornillo ya apretado con el destornillador: paso completado */
+.punto-tornillo[data-apretado="true"] {
+  border-color: #6fcf6f;
+  background-color: #2f5c2f;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Punto de fijación resaltado mientras se arrastra un tornillo por encima */
+.punto-presion--resaltado {
+  border-style: solid;
+  border-color: #e0b23d;
+  background-color: rgba(224, 178, 61, 0.35);
+}
+
+.zona-placa-madre__etiqueta {
+  position: absolute;
+  top: -2.2rem;
+  right: 0;
+  padding: 0.4rem 0.75rem;
+  background-color: #ffffff;
+  border: 2px solid #1a1a1a;
+  border-radius: 6px;
+  font-family: var(--fuente-pixel);
+  font-size: 0.55rem;
+  color: #e02424;
+  white-space: nowrap;
+}
+
+/* barra de herramientas */
+
+.barra-herramientas {
+  position: absolute;
+  bottom: var(--espacio-borde);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  gap: clamp(0.6rem, 1.2vw, 1rem);
+  padding: clamp(0.6rem, 1.2vw, 1rem);
+  background-color: rgba(0, 0, 0, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.barra-herramientas__item {
+  position: relative;
+  width: clamp(2.75rem, 4vw, 3.5rem);
+  height: clamp(2.75rem, 4vw, 3.5rem);
+  background-color: #2a2a2a;
+  border: 2px dashed #666666;
+  border-radius: 6px;
+  padding: 0;
+
+  /* NUEVO: ahora los casilleros con herramienta son <button>, así que
+     centramos el ícono adentro (mismo arreglo de la vez pasada). */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* NUEVO: cualquier imagen dentro de un casillero se ajusta sin deformarse */
+.barra-herramientas__item img {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* NUEVO: casillero vacío (los <div> sin herramienta todavía) */
+div.barra-herramientas__item {
+  cursor: default;
+}
+
+/* NUEVO: herramienta seleccionada actualmente (referencia visual opcional
+   en la propia barra, además del cambio de cursor sobre el gabinete) */
+.barra-herramientas__item[aria-pressed="true"] {
+  border-color: #e0b23d;
+  border-style: solid;
+}
+
+/* NUEVO: herramienta ya gastada (placa madre usada, o tornillos en 0) */
+.barra-herramientas__item[data-agotado="true"] {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Pista visual: resalta en amarillo la herramienta que corresponde usar
+   a continuación (placa madre -> tornillos -> destornillador), para que
+   el jugador no se pierda. La actualiza herramientas_nivel_1.js. */
+.barra-herramientas__item.barra-herramientas__item--sugerido {
+  border-color: #ffd23f;
+  border-style: solid;
+  box-shadow: 0 0 0 2px rgba(255, 210, 63, 0.55), 0 0 10px 2px rgba(255, 210, 63, 0.65);
+  animation: pulso-sugerencia 1.4s ease-in-out infinite;
+}
+
+/* "placa-madre" y "tornillo" se pueden arrastrar: cursor "grab" y
+   touch-action: none para que el navegador no intente hacer scroll/zoom
+   con el dedo mientras se arrastran en pantallas táctiles. */
+.barra-herramientas__item[data-herramienta="placa-madre"]{
+  cursor: grab;
+  touch-action: none;
+}
+
+.barra-herramientas__item[data-herramienta="placa-madre"]:active {
+  cursor: grabbing;
+}
+
+/* Ícono "fantasma" que sigue al puntero mientras se arrastra una
+   herramienta desde la barra hasta su destino. */
+.arrastre-fantasma {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: clamp(2.25rem, 3.2vw, 2.75rem);
+  height: clamp(2.25rem, 3.2vw, 2.75rem);
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 200;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.45));
+}
+
+/* Mientras se arrastra la placa madre, se muestra rotada para anticipar
+   cómo queda encarada una vez puesta (ver "Fondo superior - Nivel 2"). */
+.arrastre-fantasma--placa-madre {
+  transform: translate(-50%, -50%);
+}
+
+/* NUEVO: contador de usos restantes (tornillos) */
+.barra-herramientas__contador {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  font-family: var(--fuente-pixel);
+  font-size: 0.55rem;
+  color: #ffffff;
+  text-shadow: 1px 1px 0 #000000;
+  pointer-events: none;
+}
+
+/* fin de barra de herramientas */
+
+/* NUEVO: panel de misiones. Flota arriba a la derecha, por encima del
+   fondo del nivel (ya no depende de un contenedor flex junto al gabinete,
+   porque el fondo ahora ocupa toda la pantalla). */
+.panel-misiones {
+  position: absolute;
+  top: var(--espacio-borde);
+  right: var(--espacio-borde);
+  z-index: 3;
+  width: clamp(11rem, 18vw, 15rem);
+  box-sizing: border-box;
+  padding: clamp(0.75rem, 1.5vw, 1.1rem);
+  background-color: rgba(0, 0, 0, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.panel-misiones__titulo {
+  margin: 0 0 clamp(0.7rem, 1.4vw, 1rem);
+  font-family: var(--fuente-pixel);
+  font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+  color: #ffffff;
+  text-align: center;
+}
+
+.panel-misiones__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.7rem, 1.4vw, 1rem);
+}
+
+.mision {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--fuente-pixel);
+  font-size: clamp(0.55rem, 0.95vw, 0.68rem);
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+/* Misión que todavía no llegó su turno: no se muestra */
+.mision.oculta {
+  display: none;
+}
+
+/* Casillero de estado: vacío = pendiente/activa */
+.mision__marca {
+  flex-shrink: 0;
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 2px solid #e0b23d;
+  border-radius: 3px;
+  background-color: transparent;
+}
+
+/* Misión completada: texto y casillero en verde, con un tilde */
+.mision.completada {
+  color: #6fcf6f;
+}
+
+.mision.completada .mision__marca {
+  position: relative;
+  border-color: #6fcf6f;
+  background-color: #6fcf6f;
+}
+
+.mision.completada .mision__marca::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(14% 44%, 0 63%, 39% 100%, 100% 20%, 82% 4%, 37% 72%);
+  background-color: #1a1a1a;
+}
+
+/* Pulso de la herramienta sugerida (ver .barra-herramientas__item--sugerido) */
+@keyframes pulso-sugerencia {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(255, 210, 63, 0.55), 0 0 6px 1px rgba(255, 210, 63, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(255, 210, 63, 0.85), 0 0 14px 4px rgba(255, 210, 63, 0.85);
+  }
 }
