@@ -13,9 +13,9 @@
   const SIMULAR_HOST = true; 
 
   // Rutas de redirección
-  const RUTA_MENU_PRINCIPAL = "../Menú_Principal/MenúPrincipal.html";
+  const RUTA_MENU_PRINCIPAL = "MenúPrincipal.html";
   // DECISIÓN: Comenten y ajusten esta ruta cuando tengan el HTML del nivel 1 listo.
-  const RUTA_NIVEL_1 = "../Niveles/nivel_1/nivel_1.html"; 
+  const RUTA_NIVEL_1 = "Niveles/nivel_1.html"; 
 
   // ==========================================
   // ELEMENTOS DEL DOM
