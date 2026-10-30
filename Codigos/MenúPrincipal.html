@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- -------------------- SEO BÁSICO -------------------- -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> PicoDesk - Menú </title>
+
+    <!-- -------------------- FAVICON -------------------- -->
+    <link rel="icon" href="../Recursos_Gráficos/Sprites/Icons/LOGO.ico">
+
+    <!-- -------------------- SEO REDES SOCIALES -------------------- -->
+    <meta og:title content="PicoDesk">
+    <meta og:description content="Jugá y aprendé sobre las TICs con PicoDesk">
+    <meta og:image content="../Recursos_Gráficos/Sprites/LOGO.png">
+    
+    <!-- -------------------- ESTILOS -------------------- -->
+    <link rel="stylesheet" href="CSS/MenúPrincipal.css">
+
+    <!-- [RECORRIDO] Estilos del recorrido interactivo -->
+    <link rel="stylesheet" href="CSS/Recorrido.css">
+
+    <!-- [NUEVO] Estilos en línea para asegurar que el modal funcione incluso si el CSS externo falla -->
+    <style>
+        /* [NUEVO] Ocultar modales por defecto */
+        .modal-overlay { display: none; }
+        .modal-overlay.active { display: flex; }
+    </style>
+</head>
+
+<body>
+    <div id="DecoracióndeRayas">
+        <header>
+            <nav>
+                <button rel="noopener norefeerer" id="AcercaDe"> Acerca De... </button>
+            </nav>
+            <section id="CuentayModo">
+                <button id="Modo">Cambiar Modo</button>
+                <button id="IniciarSesión"> Iniciar sesión </button>
+                <button id="Cuenta" aria-label="Configurar cuenta"></button>
+            </section>
+        </header>
+        
+        <section id="OpcionesYLogo">        
+            <div id="Opciones">
+                <h1> Menú </h1>
+                <div id="botones">
+                    <div class="ÍconoyBotón">
+                        <img src="../Recursos_Gráficos/Sprites/Icons/Unirse a sala.png" alt="">
+                        <!-- [MODIFICADO] Añadido onclick para abrir el modal -->
+                        <button class="Opciones" id="UnirseSala" onclick="abrirModal('modalUnirse')"> Unirse a sala </button>
+                    </div>
+                    
+                    <div class="ÍconoyBotón">
+                        <img src="../Recursos_Gráficos/Sprites/Icons/Crear Sala.png" alt="">
+                        <!-- [MODIFICADO] Añadido onclick para abrir el modal -->
+                        <button class="Opciones" id="CrearSala" onclick="abrirModal('modalCrear')"> Crear sala </button>
+                    </div>
+
+                    <div class="ÍconoyBotón">
+                        <img src="../Recursos_Gráficos/Sprites/Icons/Ajustes.png" alt="">
+                        <button class="Opciones" id="Ajustes"> Ajustes</button>
+                    </div>
+                </div>
+            </div>
+
+            <section id="logo">
+                <div>
+                    <img src="../Recursos_Gráficos/Sprites/Icons/LOGO.png" alt="Logo pixel-art de llave inglesa roja con el nombre PicoDesk.">
+                    <h2> ¡BIENVENIDO! </h2>
+                </div>
+            </section>
+        </section>
+    </div>    
+
+    <!-- ================================================================= -->
+    <!-- [NUEVO] POP-UP: UNIRSE A UNA SALA                                 -->
+    <!-- ================================================================= -->
+    <!-- Ejemplo para el modal de Unirse -->
+    <div id="modalUnirse" class="modal-overlay">
+        <div class="modal-content">
+            <!-- [NUEVO] Barra superior con el botón y el título -->
+            <div class="modal-header">
+                <button class="btn-atras" onclick="cerrarModal('modalUnirse')">◀ Atrás</button>
+                <h2>Unirse a una sala</h2>
+            </div>
+            
+            <!-- [NUEVO] Cuerpo del modal con el formulario -->
+            <div class="modal-body">
+                <input type="text" id="inputCodigoUnirse" class="modal-input" placeholder="código de sala..." maxlength="8">
+                <button class="btn-accion btn-unirse" onclick="enviarUnirse()">UNIRSE</button>
+            </div>
+        </div>
+    </div>
+
+<!-- ================================================================= -->
+<!-- [CORREGIDO] POP-UP: CREAR UNA SALA                                -->
+<!-- ================================================================= -->
+    <div id="modalCrear" class="modal-overlay">
+        <div class="modal-content">
+            <!-- [CORREGIDO] Ahora tiene la estructura de barra superior -->
+            <div class="modal-header">
+                <button class="btn-atras" onclick="cerrarModal('modalCrear')">◀ Atrás</button>
+                <h2>Crear sala</h2>
+            </div>
+            
+            <!-- [CORREGIDO] Ahora tiene la estructura de cuerpo -->
+            <div class="modal-body">
+                <!-- Contenedor para el tamaño de la sala -->
+                <div class="tamano-sala-container">
+                    <label>Tamaño de la sala</label>
+                    <div class="selector-tamano">
+                        <button class="btn-triangulo" onclick="cambiarTamano(-1)">◀</button>
+                        <span id="valorTamano">6</span>
+                        <button class="btn-triangulo" onclick="cambiarTamano(1)">▶</button>
+                    </div>
+                </div>
+                
+                <!-- Campo de entrada para el código -->
+                <input type="text" id="inputCodigoCrear" class="modal-input" placeholder="código de sala..." maxlength="8">
+                
+                <!-- Botón de envío -->
+                <button class="btn-accion" id="btn-crear" onclick="enviarCrear()">CREAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- [NUEVO] LÓGICA DE JAVASCRIPT (Simulación de Base de Datos)        -->
+    <!-- ================================================================= -->
+    <script src="JS/SimulaciónBD.js"></script>
+    <!-- [RECORRIDO] Lógica del recorrido interactivo -->
+    <script src="JS/Recorrido.js"></script>
+</body>
+</html>

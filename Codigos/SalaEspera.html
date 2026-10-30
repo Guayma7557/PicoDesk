@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>PicoDesk - Sala de Espera</title>
+  <link rel="stylesheet" href="CSS/SalaEspera.css" />
+</head>
+<body>
+    <div id="DecoraciónRayas">
+  <!-- ===================================================================== -->
+  <!-- HEADER: Botón cancelar, Info del Host y Botón Comenzar                 -->
+  <!-- ===================================================================== -->
+  <header class="header-sala">
+    <!-- DECISIÓN: El botón dice "Cancelar" o "Salir". Usamos el color rojo (Secundario) -->
+    <button type="button" id="btn-cancelar" class="btn-cancelar">Cancelar</button>
+    
+    <!-- Info del Host (El que creó la sala) -->
+    <div class="info-host">
+      <div class="avatar-host"></div>
+      <span id="nombre-host">Nombre usuario <span class="host-tag">{HOST}</span></span>
+    </div>
+
+    <!-- DECISIÓN: Este botón será azul (ColorPrimario) si eres el host y está activo. 
+         Si eres un invitado, el JS lo pondrá gris y deshabilitado. -->
+    <button type="button" id="btn-comenzar" class="btn-comenzar">Comenzar</button>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- SUB-HEADER: Estado de la sala y Código de la misma                     -->
+  <!-- ===================================================================== -->
+  <div class="sub-header">
+    <p class="estado-texto">Esperando a comenzar...</p>
+    <!-- DECISIÓN: Este código vendrá del Menú Principal cuando se crea la sala. 
+         Por ahora es un placeholder que el JS podría leer de la URL. -->
+    <p class="codigo-texto">codigo: <span id="codigo-sala">abcd1234</span></p>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MAIN: Grilla de Jugadores conectados                                   -->
+  <!-- ===================================================================== -->
+  <main class="main-jugadores">
+    <!-- DECISIÓN: Usamos un contenedor Grid en CSS para lograr las 3 columnas y 4 filas.
+         Los 12 "slots" (espacios) están listos para ser llenados por el JS. -->
+    <div class="grid-jugadores" id="grid-jugadores">
+      
+      <!-- El Host (Slot 1) - Siempre estará presente -->
+      <div class="slot-jugador slot-host">
+        <div class="avatar"></div>
+        <span class="nombre">Nombre usuario</span>
+      </div>
+
+      <!-- Los demás Slots (Vacíos por defecto) -->
+      <!-- Usamos un bucle visual simple en HTML. El JS se encargará de mostrarlos u ocultarlos. -->
+      <div class="slot-jugador slot-vacio"></div>
+      <div class="slot-jugador slot-vacio"></div>
+      <div class="slot-jugador slot-vacio"></div>
+      <div class="slot-jugador slot-vacio"></div>
+      <div class="slot-jugador slot-vacio"></div>
+      <div class="slot-jugador slot-vacio"></div>
+      <div class="slot-jugador slot-vacio"></div>
+      <div class="slot-jugador slot-vacio"></div>
+      <div class="slot-jugador slot-vacio"></div>
+      <div class="slot-jugador slot-vacio"></div>
+      <div class="slot-jugador slot-vacio"></div>
+    </div>
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- FOOTER: Título inferior y Ping                                         -->
+  <!-- ===================================================================== -->
+  <footer class="footer-sala">
+    <h1>Sala de espera</h1>
+    <!-- DECISIÓN: El ping se actualizará con JS para simular latencia real -->
+    <div class="ping-box" id="ping-box">PING: 60 ms</div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- POPUP: Diálogo de confirmación de salida (Mismo que Nivel 2)           -->
+  <!-- ===================================================================== -->
+  <div class="overlay-confirmacion" id="overlay-confirmacion" aria-hidden="true">
+    <div class="dialogo-confirmacion" role="alertdialog" aria-modal="true">
+      <p class="dialogo-confirmacion__texto">¿Estás seguro de salir?</p>
+      <div class="dialogo-confirmacion__opciones">
+        <button type="button" class="dialogo-confirmacion__si" id="btn-si-salir">Si</button>
+        <button type="button" class="dialogo-confirmacion__no" id="btn-no-salir">No</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="JS/SalaEspera.js"></script>
+  </div>
+</body>
+</html>

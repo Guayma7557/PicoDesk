@@ -1,0 +1,169 @@
+/* ------------------ Importes y Root ------------------ */
+
+/* ------------------ ------------------ */
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&display=swap');
+
+:root{ 
+    /* Colores */
+    --ColorPrimario: #477F90;
+    --ColorSecundario: #A44545;
+    --ColorTerciario: #404040;
+    --ColorCuarto: #303030;
+    --ColorQuinto: #E8E7E4;
+
+}
+
+/* ------------------ Configuracipnes generales ------------------ */
+
+    *{
+        padding: 0px;
+        margin: 0px;
+        box-sizing: border-box;
+        font-family: 'DotGothic16';
+        font-weight: normal;
+    }
+
+    h1, h2{
+        font-family: 'VT323';
+        font-size: 3rem;
+        color: var(--ColorQuinto);
+    }
+
+/* ------------------ body ------------------ */
+
+    body{
+        background-color: var(--ColorCuarto);
+        height: 80vh;
+    }
+
+
+/* ------------------ Header ------------------ */
+
+    header{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        margin-top: 2em;
+        padding: 1em;
+        background-color: var(--ColorTerciario);
+    }
+
+/* ------------------ Corpus general, puntaje y componente ------------------ */
+
+    #CorpusGeneral{
+        height: 80vh;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        color: var(--ColorQuinto);
+        padding: 1em;
+    }
+
+/* ------------------ Resultados y puntaje del nivel ------------------ */
+
+    #Resultados{
+        margin-top: 3em;
+    }
+
+/* ------------------ Puntajes ------------------ */
+
+    .Puntajes{
+        display: flex;
+        justify-content: center;
+        flex: nowrap;
+        margin-top: 2em;
+        gap: 2em;
+        min-width: 30vw;
+    }
+
+    .Puntajes p{
+        font-size: 1.3em;
+    }
+
+    .Puntajes img{
+        aspect-ratio: 1 / 1;
+        flex-grow: auto;
+    }
+
+    .Puntajes h2{
+        text-align: center;
+        border-radius: 0.2em;
+        background-color:  rgba(255,255,255, 0.1);
+        border: 1px solid  rgba(255,255,255, 0.3);
+        width: 20%;
+    }
+
+/* ------------------ Componente ------------------ */    
+
+    #ContainerComponentes{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        padding: 2em;
+        min-width: 30vw;
+        border-radius: 0.5em;
+        border: 1px solid rgba(255,255,255, 0.3);
+        background-color: rgba(255,255,255, 0.1);
+    }
+
+    #Componente{
+        width: 100%;
+    }
+
+    #Componente img{
+        margin-left: 25%;
+        width: 50%;
+        aspect-ratio: 1 / 1;
+    }
+
+    #Componente textarea{
+        width: 100%;
+        height: 40%;
+        color: var(--ColorQuinto);
+        background-color: var(--ColorCuarto);
+        padding: 1em;
+        border: none;
+        border-radius: 1em;
+        resize: none;
+        font-size: 1.5em;
+    }
+
+    textarea:active{
+        border: none;
+    }
+
+    textarea::-webkit-scrollbar-track{
+        background-color: var(--ColorCuarto);
+    }
+
+/* ------------------ Botones ------------------ */
+
+    button{
+        background-color: var(--ColorSecundario);
+        border-radius: 5px;
+        border: none;
+        color: var(--ColorQuinto);
+        padding: 0.5em;
+        padding-left: 2em;
+        padding-right: 2em;
+        width: max-content;
+        cursor: pointer;
+        transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+    }
+
+    button:hover{
+        background-color: #b85454;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+    }
+
+    button:active{
+        background-color: #8a3737;
+        transform: scale(0.95);
+        box-shadow: none;
+    }
+
+    button:focus-visible{
+        outline: 2px solid var(--ColorQuinto);
+        outline-offset: 2px;
+    }

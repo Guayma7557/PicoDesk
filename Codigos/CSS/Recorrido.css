@@ -1,0 +1,177 @@
+/* ================================================================= */
+/* RECORRIDO INTERACTIVO (tour de bienvenida del Menú Principal)     */
+/* Usa las mismas variables de color definidas en :root              */
+/* ================================================================= */
+
+/* Capa invisible que bloquea los clics en el menú mientras dura el recorrido */
+.tour-bloqueo{
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: transparent;
+}
+
+/* Elemento resaltado: el box-shadow gigante crea el fondo oscuro
+   semi-transparente y deja un "agujero" sobre el botón señalado */
+.tour-foco{
+    position: fixed;
+    z-index: 2001;
+    pointer-events: none;
+    border-radius: 8px;
+    box-shadow:
+        0 0 0 9999px rgba(0, 0, 0, 0.65),
+        0 0 0 3px var(--ColorQuinto),
+        0 0 18px 6px rgba(71, 127, 144, 0.85);
+    transition: top 0.25s ease, left 0.25s ease, width 0.25s ease, height 0.25s ease;
+    animation: TourHalo 1s steps(2, end) infinite;
+}
+
+@keyframes TourHalo{
+    0%   { outline: 3px solid rgba(232, 231, 228, 0.0); outline-offset: 4px; }
+    50%  { outline: 3px solid rgba(232, 231, 228, 0.6); outline-offset: 7px; }
+    100% { outline: 3px solid rgba(232, 231, 228, 0.0); outline-offset: 4px; }
+}
+
+/* Tarjeta tipo globo de diálogo */
+.tour-tarjeta{
+    position: fixed;
+    z-index: 2002;
+    width: 300px;
+    max-width: calc(100vw - 24px);
+    display: flex;
+    flex-direction: column;
+    gap: 0.8em;
+    padding: 1.1em 1.3em;
+    background-color: var(--ColorTerciario);
+    color: var(--ColorQuinto);
+    border: 2px solid var(--ColorQuinto);
+    border-radius: 10px;
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.55);
+    animation: AparecerModal 0.25s ease-out;
+}
+
+.tour-tarjeta h2{
+    font-size: 2.2em;
+    line-height: 1;
+}
+
+.tour-tarjeta p{
+    font-size: 0.95em;
+    line-height: 1.5;
+    color: var(--ColorQuinto);
+}
+
+/* Flechita que apunta al elemento resaltado */
+.tour-tarjeta::before{
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background-color: var(--ColorTerciario);
+    border: 2px solid var(--ColorQuinto);
+    transform: rotate(45deg);
+    display: none;
+}
+.tour-tarjeta[data-lado="derecha"]::before{
+    display: block;
+    left: -9px;
+    top: var(--TourFlecha, 24px);
+    border-right: none;
+    border-top: none;
+}
+.tour-tarjeta[data-lado="izquierda"]::before{
+    display: block;
+    right: -9px;
+    top: var(--TourFlecha, 24px);
+    border-left: none;
+    border-bottom: none;
+}
+.tour-tarjeta[data-lado="abajo"]::before{
+    display: block;
+    top: -9px;
+    left: var(--TourFlecha, 24px);
+    border-right: none;
+    border-bottom: none;
+}
+.tour-tarjeta[data-lado="arriba"]::before{
+    display: block;
+    bottom: -9px;
+    left: var(--TourFlecha, 24px);
+    border-left: none;
+    border-top: none;
+}
+
+/* Puntitos de progreso */
+.tour-puntos{
+    display: flex;
+    gap: 0.4em;
+    font-size: 1.1em;
+    letter-spacing: 0.1em;
+}
+.tour-punto{
+    color: rgba(232, 231, 228, 0.35);
+}
+.tour-punto.activo{
+    color: var(--ColorQuinto);
+}
+
+/* Botones */
+.tour-botones{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+}
+
+.tour-omitir{
+    background: none;
+    border: none;
+    color: rgba(232, 231, 228, 0.6);
+    cursor: pointer;
+    padding: 0.4em 0.2em;
+    height: auto;
+    font-size: 0.95em;
+    transition: 0.2s;
+}
+.tour-omitir:hover{
+    color: var(--ColorQuinto);
+    text-decoration: underline;
+}
+
+.tour-siguiente{
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    background-color: var(--ColorPrimario);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5em 1em;
+    height: auto;
+    font-size: 1em;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.tour-siguiente:hover{
+    background-color: #356673;
+    transform: translateY(-2px);
+}
+.tour-siguiente:active{
+    transform: translateY(0);
+}
+
+/* Atajo de teclado visible como referencia */
+.tour-tecla{
+    font-family: 'VT323';
+    font-size: 1.05em;
+    padding: 0 0.4em;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 600px){
+    .tour-tarjeta{ padding: 0.9em 1em; }
+    .tour-tarjeta h2{ font-size: 1.8em; }
+    .tour-tecla{ display: none; }
+}

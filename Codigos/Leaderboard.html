@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PicoDesk - Clasificación</title>
+  <link rel="icon" href="../Recursos_Gráficos/Sprites/Icons/LOGO.ico">
+  <link rel="stylesheet" href="CSS/leaderboard.css">
+</head>
+<body>
+  <main class="pantalla">
+
+    <header class="barra-superior">
+      <h1 class="solo-lectores">Tabla de clasificación</h1>
+      <button type="button" id="volver" class="boton-volver">
+        <span class="boton-volver__flecha" aria-hidden="true"></span>
+        <span class="boton-volver__texto">Volver</span>
+      </button>
+    </header>
+
+    <!-- Podio. El HTML va en orden 1.º, 2.º, 3.º (orden de lectura);
+         el CSS los acomoda visualmente como 2.º - 1.º - 3.º. -->
+    <section class="podio" aria-label="Los tres mejores puestos">
+
+      <article class="puesto puesto--1">
+        <h2 class="puesto__etiqueta">1er LUGAR</h2>
+        <div class="puesto__tarjeta">
+          <svg class="corona" viewBox="0 0 16 12" shape-rendering="crispEdges" aria-hidden="true">
+            <path d="M1 11V3l3 3 4-5 4 5 3-3v8z" fill="#e0b23d" stroke="#1a1a1a" stroke-width="1" stroke-linejoin="miter"/>
+            <path d="M2 9h12v2H2z" fill="#b8892a"/>
+          </svg>
+          <div class="puesto__avatar" aria-hidden="true"></div>
+          <p class="puesto__nombre"></p>
+          <p class="puesto__datos"></p>
+        </div>
+      </article>
+
+      <article class="puesto puesto--2">
+        <h2 class="puesto__etiqueta">2do LUGAR</h2>
+        <div class="puesto__tarjeta">
+          <div class="puesto__avatar" aria-hidden="true"></div>
+          <p class="puesto__nombre"></p>
+          <p class="puesto__datos"></p>
+        </div>
+      </article>
+
+      <article class="puesto puesto--3">
+        <h2 class="puesto__etiqueta">3er LUGAR</h2>
+        <div class="puesto__tarjeta">
+          <div class="puesto__avatar" aria-hidden="true"></div>
+          <p class="puesto__nombre"></p>
+          <p class="puesto__datos"></p>
+        </div>
+      </article>
+
+    </section>
+
+    <!-- Tabla con el resto de los participantes (del 4.º en adelante). -->
+    <section class="clasificacion" aria-label="Resto de la clasificación">
+      <div class="tabla-contenedor">
+        <table class="tabla">
+          <colgroup>
+            <col class="col-numero">
+            <col class="col-nombre">
+            <col class="col-tiempo">
+            <col class="col-puntaje">
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">N°</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Tiempo</th>
+              <th scope="col">Puntaje</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-cuerpo"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="JS/leaderboard.js"></script>
+</body>
+</html>
