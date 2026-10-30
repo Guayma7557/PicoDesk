@@ -1,7 +1,7 @@
 // [NUEVO] Variable global para el tamaño de la sala
         let tamanoSala = 6;
 	const RUTA_SALA_ESPERA = "SalaEspera.html";
-	btn_Crear_Sala = document.getElementbyID("btn-crear");
+	const btn_Crear_Sala = document.getElementbyId("btn-crear");
 
         // [NUEVO] Función para abrir un modal y aplicar el blur
         function abrirModal(idModal) {
@@ -70,6 +70,10 @@
             
             alert(`¡Sala creada con éxito!\nCódigo: ${codigo.toUpperCase()}\nTamaño: ${tamanoSala} jugadores.`);
             cerrarModal('modalCrear');
+
+			// [NUEVO] Redirigir a la Sala de Espera pasando código y tamaño por URL
+    		window.location.href = RUTA_SALA_ESPERA + '?codigo=' + encodeURIComponent(codigo.toUpperCase()) + '&tamano=' + tamanoSala;
+
         }
 
         // [NUEVO] Cerrar modal si se hace clic fuera del contenido
