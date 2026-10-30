@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- -------------------- SEO BÁSICO -------------------- -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> PicoDesk - Registro </title>
+
+    <!-- -------------------- FAVICON -------------------- -->
+    <!-- Misma ruta relativa que MenúPrincipal.html: se asume que este
+         archivo vive en la misma carpeta que ese menú. -->
+    <link rel="icon" href="../Recursos_Gráficos/Sprites/Icons/LOGO.ico">
+
+    <!-- -------------------- ESTILOS -------------------- -->
+    <link rel="stylesheet" href="CSS/Registro.css">
+</head>
+<body>
+    <!-- Mismo fondo animado que el Menú principal (franjas en movimiento +
+         degradé). Ver Registro.css: #DecoracióndeRayas / @keyframes
+         MovimientoFondo, duplicados ahí para que esta página sea
+         independiente de MenúPrincipal.css. -->
+    <div id="DecoracióndeRayas">
+        <form id="formRegistro" class="registro-pantalla" novalidate>
+
+            <header class="registro-header">
+                <button type="button" id="btnCancelarRegistro" class="btn-cancelar">Cancelar</button>
+                <h1>Registro</h1>
+                <button type="submit" class="btn-registrar">Registrar</button>
+            </header>
+
+            <div class="registro-cuerpo">
+
+                <section class="registro-columna" aria-labelledby="tituloDatosPersonales">
+                    <h2 id="tituloDatosPersonales">
+                        <svg class="registro-icono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                            <circle cx="12" cy="8" r="3.4"></circle>
+                            <path d="M5 20c0-3.6 3.1-6.2 7-6.2s7 2.6 7 6.2"></path>
+                        </svg>
+                        Datos personales
+                    </h2>
+
+                    <div class="campo campo--linea">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" name="nombre" autocomplete="given-name" required>
+                    </div>
+
+                    <div class="campo campo--linea">
+                        <label for="apellido">Apellido:</label>
+                        <input type="text" id="apellido" name="apellido" autocomplete="family-name" required>
+                    </div>
+
+                    <div class="campo campo--linea">
+                        <label for="dni">DNI:</label>
+                        <!-- Solo números: ver Registro.js, que filtra lo que no sea dígito -->
+                        <input type="text" id="dni" name="dni" inputmode="numeric" autocomplete="off" maxlength="8" required>
+                    </div>
+
+                    <div class="campo campo--linea">
+                        <label for="contraseña">Contraseña:</label>
+                        <input type="password" id="contraseña" name="contraseña" autocomplete="new-password" required>
+                    </div>
+
+                    <div class="campo campo--linea">
+                        <label for="confirmarContraseña">Confirmar Contraseña:</label>
+                        <input type="password" id="confirmarContraseña" name="confirmarContraseña" autocomplete="new-password" required>
+                    </div>
+                </section>
+
+                <div class="registro-divisor" aria-hidden="true"></div>
+
+                <section class="registro-columna" aria-labelledby="tituloDatosEscolares">
+                    <h2 id="tituloDatosEscolares">
+                        <svg class="registro-icono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                            <path d="M4 10.5 12 4l8 6.5"></path>
+                            <path d="M6 9.5V20h12V9.5"></path>
+                            <path d="M10 20v-5h4v5"></path>
+                        </svg>
+                        Datos escolares
+                    </h2>
+
+                    <div class="campo campo--caja">
+                        <label for="establecimiento">Establecimiento</label>
+                        <input type="text" id="establecimiento" name="establecimiento" class="campo__input" required>
+                    </div>
+
+                    <div class="campo campo--caja">
+                        <label for="especialidad">Especialidad</label>
+                        <input type="text" id="especialidad" name="especialidad" class="campo__input" required>
+                    </div>
+
+                    <div class="campo campo--caja">
+                        <label for="estrato">Estrato</label>
+                        <input type="text" id="estrato" name="estrato" class="campo__input" required>
+                    </div>
+
+                    <div class="registro-fila">
+                        <div class="campo campo--caja campo--chico">
+                            <label for="curso">Curso</label>
+                            <input type="text" id="curso" name="curso" class="campo__input" required>
+                        </div>
+                        <div class="campo campo--caja campo--chico">
+                            <label for="division">División</label>
+                            <input type="text" id="division" name="division" class="campo__input" required>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </form>
+    </div>
+
+    <script src="JS/Registro.js"></script>
+</body>
+</html>
