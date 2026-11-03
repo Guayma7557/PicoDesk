@@ -56,7 +56,6 @@
             dni: inputDni.value.trim(),
             establecimiento: document.getElementById('establecimiento').value.trim(),
             especialidad: document.getElementById('especialidad').value.trim(),
-            estrato: document.getElementById('estrato').value.trim(),
             curso: document.getElementById('curso').value.trim(),
             division: document.getElementById('division').value.trim(),
         };
