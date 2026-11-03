@@ -15,6 +15,7 @@
   const elNumeroNivel = document.querySelector("#numero-nivel");
   const elValorPuntaje = document.querySelector("#valor-puntaje");
   const elValorTiempo = document.querySelector("#valor-tiempo");
+  
 
   let resultado = null;
   try {
@@ -32,4 +33,14 @@
   if (elNumeroNivel) elNumeroNivel.textContent = resultado.nivel;
   if (elValorPuntaje) elValorPuntaje.textContent = resultado.puntaje;
   if (elValorTiempo) elValorTiempo.textContent = resultado.tiempoTexto;
+
+  if (resultado.nivel < 6 || resultado.nivel == 2){
+      const NumeroSiguienteNivel = resultado.nivel + 1;
+      const RUTA_SIGUIENTE_NIVEL = `Niveles/nivel_${NumeroSiguienteNivel}/nivel_${NumeroSiguienteNivel}.html`;
+
+      setTimeout(() => {
+        window.location.href = RUTA_SIGUIENTE_NIVEL;
+      }, 5000)
+  }
+      
 })();
