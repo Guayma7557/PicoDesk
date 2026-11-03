@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Nivel 5 - Fuente de Poder</title>
+  <link rel="stylesheet" href="nivel_5.css" />
+</head>
+<body>
+
+  <!-- ===================================================================== -->
+  <!-- INTRODUCCIÓN                                                          -->
+  <!-- ===================================================================== -->
+  <div id="pantalla-intro" class="intro-overlay">
+    <div class="intro-contenido">
+      <!-- [TEXTO DE INTRODUCCIÓN AQUÍ] -->
+      <img src="../../../Recursos_Gráficos/Sprites/Fuente_de_poder/Fuente de poder - Nivel 5.png" alt="Fuente de Poder" class="icono-intro" />
+      <h1>La Fuente de Poder</h1>
+      <p>
+        La fuente de poder es el componente que le da vida a la computadora. 
+        Toma la energía del enchufe y la transforma en el voltaje que necesita la placa madre y los componentes.
+      </p>
+      <p class="instruccion-click">Haz clic en cualquier parte para empezar</p>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- JUEGO PRINCIPAL                                                       -->
+  <!-- ===================================================================== -->
+  <section id="juego-principal" class="pantalla-niveles oculto">
+    
+    <!-- Botón para saltar la animación de fondos -->
+    <button id="btn-skip" class="btn-skip oculto">Saltar Animación ⏭</button>
+
+    <!-- Fondo de las 3 etapas (inclinado -> superior -> zoom) -->
+    <div class="fondo-marco" id="fondo-marco">
+      <img id="bg-inclinado" src="../../../Recursos_Gráficos/Sprites/Fuente_de_poder/Fondo inclinado - Nivel 5.png" class="fondo-capa bg-activo" />
+      <img id="bg-superior" src="../../../Recursos_Gráficos/Sprites/Fuente_de_poder/Fondo superior - Nivel 5.png" class="fondo-capa" />
+      <img id="bg-zoom" src="../../../Recursos_Gráficos/Sprites/Fuente_de_poder/Fondo_SinCarriles.png" class="fondo-capa" />
+      
+      <!-- Zona para soltar la Fuente de Poder (Etapa 2) -->
+      <div id="zona-fuente" class="zona-fuente"></div>
+
+      <!-- Lienzo para dibujar los carriles (Etapa 3) -->
+      <canvas id="lienzo-carriles"></canvas>
+    </div>
+
+    <!-- Panel de Misiones -->
+    <aside class="panel-misiones">
+      <h2 class="panel-misiones__titulo">Misiones</h2>
+      <ol class="panel-misiones__lista">
+        <li class="mision" data-mision="conectar-fuente">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Conectar la fuente</span>
+        </li>
+        <li class="mision oculta" data-mision="conectar-componentes">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Alimentar componentes (<span id="componentes-completados">0</span>/3)</span>
+        </li>
+      </ol>
+    </aside>
+
+    <!-- Barra de Herramientas -->
+    <div class="barra-herramientas" id="barra-herramientas">
+      <button type="button" class="barra-herramientas__item" id="herramienta-fuente" data-herramienta="fuente">
+        <img src="../../../Recursos_Gráficos/Sprites/Fuente_de_poder/Fuente de poder - Nivel 5.png" alt="Fuente de poder" />
+      </button>
+    </div>
+
+    <!-- Interfaz Lateral (Salir y Progreso) -->
+    <div class="barra-lateral">
+      <button type="button" class="boton-salir" aria-label="Salir"></button>
+      <div class="barra-progreso" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Progreso del nivel">
+        <div class="barra-progreso__relleno" style="--progreso: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Popup de Salida -->
+    <div class="overlay-confirmacion" aria-hidden="true">
+      <div class="dialogo-confirmacion" role="alertdialog" aria-modal="true">
+        <p class="dialogo-confirmacion__texto">¿Estás seguro de salir?</p>
+        <div class="dialogo-confirmacion__opciones">
+          <button type="button" class="dialogo-confirmacion__si">Si</button>
+          <button type="button" class="dialogo-confirmacion__no">No</button>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <script src="nivel_5.js"></script>
+</body>
+</html>
