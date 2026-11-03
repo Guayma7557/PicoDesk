@@ -236,35 +236,198 @@ body{
     min-width: 0;
 }
 
+/* --------------- Escala fluida (formulario a pantalla completa) ---------------
+   Todo el diseño está en em/rem, así que alcanza con escalar el tamaño base:
+   en 1920x1080 da ~24px (el 150% del tamaño normal) y se reduce de forma
+   proporcional en pantallas más chicas. Se toma el menor entre el ancho y
+   el alto para que nunca se desborde ni en vertical ni en horizontal. */
+html{
+    font-size: clamp(15px, min(1.25vw, 2.2vh), 36px);
+}
+
+h1{ font-size: 2.6em; }
+h2{ font-size: 1.8em; }
+
+.registro-header{
+    padding: 0.8em clamp(1em, 3vw, 3em);
+}
+
+.btn-cancelar,
+.btn-registrar{
+    padding: 0.5em 1.8em;
+    font-size: 1em;
+}
+
+/* El cuerpo ocupa todo el alto disponible y las dos columnas se reparten
+   el ancho en lugar de quedar fijas en el centro. */
+.registro-cuerpo{
+    align-items: stretch;
+    gap: clamp(1.5em, 5vw, 6em);
+    padding: clamp(1.5em, 6vh, 4em) clamp(1em, 6vw, 8em);
+}
+
+.registro-columna{
+    flex: 1 1 0;
+    max-width: 34rem;
+    gap: clamp(1em, 5.5vh, 3.2em);
+}
+
+.registro-columna h2{
+    margin-bottom: 0;
+}
+
+.campo{
+    gap: 0.45em;
+}
+
+.campo label{
+    font-size: 1em;
+}
+
+.campo--linea input{
+    padding: 0.4em 0.3em;
+}
+
+.campo--caja .campo__input{
+    padding: 0.8em 1em;
+    border-radius: 0.5em;
+}
+
+.registro-fila{
+    gap: 1.2em;
+}
+
 /* --------------- Responsive --------------- */
+/* Base fluida: nada se desborda en horizontal y los controles táctiles
+   tienen un tamaño cómodo. */
+html{
+    -webkit-text-size-adjust: 100%;
+}
+
+body{
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+}
+
+#DecoracióndeRayas{
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: auto;
+}
+
+.registro-pantalla{
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+.registro-columna{
+    min-width: 0;
+}
+
+/* Tablet y pantallas medianas: columnas más ajustadas */
+@media (max-width: 900px){
+    .registro-cuerpo{
+        gap: 1.5em;
+        padding: 1.5em 1em;
+    }
+
+    .registro-columna{
+        max-width: 20rem;
+    }
+
+    h1{ font-size: 2.1em; }
+    h2{ font-size: 1.5em; }
+}
+
+/* Celulares y tablets en vertical: una sola columna */
 @media (max-width: 700px){
     .registro-cuerpo{
         flex-direction: column;
         align-items: center;
+        gap: 1.5em;
+    }
+
+    .registro-columna{
+        max-width: 26rem;
     }
 
     .registro-divisor{
+        align-self: center;
         width: 100%;
+        max-width: 26rem;
         height: 2px;
-        max-width: 22rem;
     }
 
+    /* Header: título arriba, botones lado a lado debajo */
     .registro-header{
-        flex-wrap: wrap;
-        justify-content: center;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.7em;
+        padding: 0.9em 1em;
         text-align: center;
     }
 
     .registro-header h1{
-        order: -1;
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    .btn-cancelar,
+    .btn-registrar{
         width: 100%;
+        min-height: 2.8em;
     }
 }
 
-@media (max-width: 420px){
+/* Celulares chicos: en "línea" la etiqueta va arriba del campo */
+@media (max-width: 480px){
+    .registro-cuerpo{
+        padding: 1.2em 0.9em 2em;
+    }
+
+    .campo--linea{
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.2em;
+    }
+
+    .campo--linea input{
+        flex: 0 0 auto;
+        width: 100%;
+        min-height: 2.4em;
+    }
+
+    .campo--caja .campo__input{
+        min-height: 2.8em;
+    }
+
+    h1{ font-size: 1.9em; }
+    h2{ font-size: 1.4em; }
+}
+
+/* Pantallas muy angostas: Curso y División se apilan */
+@media (max-width: 340px){
+    .registro-fila{
+        flex-direction: column;
+    }
+
     .btn-cancelar,
     .btn-registrar{
-        padding: 0.5em 1.2em;
         font-size: 0.9em;
+        padding: 0.5em 0.8em;
+    }
+}
+
+/* Pantallas bajas (celular en horizontal): menos aire vertical */
+@media (max-height: 480px) and (orientation: landscape){
+    .registro-header{
+        padding: 0.5em 1em;
+    }
+
+    .registro-cuerpo{
+        padding-top: 1em;
+        padding-bottom: 1em;
     }
 }
