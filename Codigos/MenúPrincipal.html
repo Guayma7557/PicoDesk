@@ -20,6 +20,9 @@
     <!-- [RECORRIDO] Estilos del recorrido interactivo -->
     <link rel="stylesheet" href="CSS/Recorrido.css">
 
+    <!-- [NUEVO] Estilos del modal "Iniciar sesión" -->
+    <link rel="stylesheet" href="CSS/IniciarSesion.css">
+
     <!-- [NUEVO] Estilos en línea para asegurar que el modal funcione incluso si el CSS externo falla -->
     <style>
         /* [NUEVO] Ocultar modales por defecto */
@@ -36,7 +39,8 @@
             </nav>
             <section id="CuentayModo">
                 <button id="Modo">Cambiar Modo</button>
-                <button id="IniciarSesión"> Iniciar sesión </button>
+                <!-- [MODIFICADO] Añadido onclick para abrir el modal (mismo criterio que UnirseSala/CrearSala) -->
+                <button id="IniciarSesión" onclick="abrirModal('modalIniciarSesion')"> Iniciar sesión </button>
                 <button id="Cuenta" aria-label="Configurar cuenta"></button>
             </section>
         </header>
@@ -126,10 +130,51 @@
     </div>
 
     <!-- ================================================================= -->
+    <!-- [NUEVO] POP-UP: INICIAR SESIÓN                                    -->
+    <!-- Reutiliza abrirModal()/cerrarModal() de SimulaciónBD.js, que ya    -->
+    <!-- son genéricas (reciben el id del modal), así que no hace falta    -->
+    <!-- tocar ese archivo para que este modal funcione.                   -->
+    <!-- ================================================================= -->
+    <div id="modalIniciarSesion" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="btn-atras" onclick="cerrarModal('modalIniciarSesion')">◀ Atrás</button>
+                <h2>Iniciar sesión</h2>
+            </div>
+
+            <div class="modal-body">
+                <!-- DNI: solo números (ver IniciarSesion.js, que filtra lo que no sea dígito) -->
+                <input
+                    type="text"
+                    id="inputDniIniciarSesion"
+                    class="modal-input"
+                    placeholder="DNI..."
+                    inputmode="numeric"
+                    autocomplete="off"
+                    maxlength="8"
+                >
+                <input
+                    type="password"
+                    id="inputContraseñaIniciarSesion"
+                    class="modal-input"
+                    placeholder="Contraseña..."
+                    autocomplete="current-password"
+                >
+                <button class="btn-accion" id="btn-iniciar-sesion" onclick="enviarIniciarSesion()">INICIAR</button>
+
+                <!-- [NUEVO] Todavía no existe Registro.html: ajustar el href cuando se cree -->
+                <a href="Registro.html" class="link-registrarse">Registrarse</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
     <!-- [NUEVO] LÓGICA DE JAVASCRIPT (Simulación de Base de Datos)        -->
     <!-- ================================================================= -->
     <script src="JS/SimulaciónBD.js"></script>
     <!-- [RECORRIDO] Lógica del recorrido interactivo -->
     <script src="JS/Recorrido.js"></script>
+    <!-- [NUEVO] Lógica del modal "Iniciar sesión" -->
+    <script src="JS/IniciarSesion.js"></script>
 </body>
 </html>
