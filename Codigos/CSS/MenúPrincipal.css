@@ -381,6 +381,61 @@
     }
 
 /* ================================================================= */
+/* [NUEVO] MODAL DE CONFIRMACIÓN "CERRAR SESIÓN"                     */
+/* Reutiliza .modal-overlay, .modal-content, .modal-header, .modal-body */
+/* y .btn-atras. Solo agrega lo propio de este modal.                */
+/* ================================================================= */
+
+    .modal-pregunta {
+        font-family: 'VT323';
+        font-size: 2.2em;
+        line-height: 1;
+        color: var(--ColorQuinto);
+        text-align: center;
+    }
+
+    .modal-detalle {
+        font-size: 1em;
+        line-height: 1.5;
+        color: var(--ColorQuinto);
+        text-align: center;
+    }
+
+    .modal-detalle span {
+        text-decoration: underline;
+    }
+
+    /* Fila con "Sí" (discreto, a la izquierda) y "No" (fuerte, a la derecha) */
+    .modal-botones {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1em;
+        width: 100%;
+    }
+
+    .btn-si {
+        background: none;
+        border: none;
+        color: rgba(232, 231, 228, 0.7);
+        cursor: pointer;
+        padding: 0.5em 0.8em;
+        height: auto;
+        font-size: 1em;
+        transition: 0.2s;
+    }
+
+    .btn-si:hover {
+        color: var(--ColorQuinto);
+        text-decoration: underline;
+    }
+
+    .modal-botones .btn-no {
+        width: auto;
+        padding: 0.6em 1.8em;
+    }
+
+/* ================================================================= */
 /* [NUEVO] MEDIA QUERIES (Diseño Responsive para teléfonos)          */
 /* ================================================================= */
     @media (max-width: 600px) {
