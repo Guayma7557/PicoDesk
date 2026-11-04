@@ -2,19 +2,15 @@
    Registro.js
    Lógica del formulario de registro: DNI solo números, "Confirmar
    Contraseña" tiene que coincidir con "Contraseña", y el envío guarda
-   nombre, apellido, DNI y contraseña en Supabase (tabla "Registros").
-   Los datos escolares todavía no se envían a ninguna tabla.
+   nombre, apellido, DNI y contraseña en Supabase (tabla "Registros") y
+   establecimiento, especialidad, curso y división en la tabla
+   "Info-Escolar", relacionada con la anterior por el DNI. Ambas se guardan
+   en una sola operación: si una falla, no se guarda ninguna.
    Requisito: haber ejecutado Registros.sql en el SQL Editor de Supabase.
    ========================================================================== */
 
 (function () {
     'use strict';
-
-    // --------------- Configuración de Supabase ---------------
-    // Project Settings -> API. Usar SOLO la clave pública (anon / publishable).
-    // Nunca pegar acá la clave "service_role".
-    const SUPABASE_URL = 'https://cvlkzvuojsjdhtovnepm.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_pqirQp0JzvHi64Gjh-5WdQ_oS5hEM7p';
 
     const formulario = document.getElementById('formRegistro');
     const inputDni = document.getElementById('dni');
@@ -25,17 +21,9 @@
 
     if (!formulario) return;
 
-    // Cliente de Supabase (se crea una sola vez, solo si la librería cargó
-    // y la configuración fue completada).
-    let db = null;
-    const configuracionCompleta =
-        window.supabase &&
-        !SUPABASE_URL.includes('TU-PROYECTO') &&
-        !SUPABASE_ANON_KEY.includes('TU_CLAVE');
-
-    if (configuracionCompleta) {
-        db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    }
+    // Cliente de Supabase compartido. Se configura una sola vez en
+    // SupabaseConfig.js; es null si falta completar la URL y la clave.
+    const db = window.PicoDeskDB || null;
 
     // DNI: solo números, igual que en el modal de "Iniciar sesión".
     // Además se exige que tenga 7 u 8 dígitos.
@@ -100,16 +88,21 @@
         }
 
         if (!db) {
-            console.error('Supabase no está configurado: completá SUPABASE_URL y SUPABASE_ANON_KEY en Registro.js.');
+            console.error('Supabase no está configurado: completá SUPABASE_URL y SUPABASE_ANON_KEY en SupabaseConfig.js.');
             alert('El registro no está disponible por el momento.');
             return;
         }
 
-        // Solo datos personales. "Confirmar contraseña" no se envía.
+        // Datos personales (tabla "Registros") y escolares (tabla "Info-Escolar").
+        // "Confirmar contraseña" no se envía.
         const nombre = document.getElementById('nombre').value.trim();
         const apellido = document.getElementById('apellido').value.trim();
         const dni = inputDni.value.trim();
         const contraseña = inputContraseña.value;
+        const establecimiento = document.getElementById('establecimiento').value.trim();
+        const especialidad = document.getElementById('especialidad').value.trim();
+        const curso = document.getElementById('curso').value.trim();
+        const division = document.getElementById('division').value.trim();
 
         if (botonRegistrar) botonRegistrar.disabled = true;
 
@@ -120,6 +113,10 @@
             p_nombre: nombre,
             p_apellido: apellido,
             p_password: contraseña,
+            p_establecimiento: establecimiento,
+            p_especialidad: especialidad,
+            p_curso: curso,
+            p_division: division,
         });
 
         if (botonRegistrar) botonRegistrar.disabled = false;
