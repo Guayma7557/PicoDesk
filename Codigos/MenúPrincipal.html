@@ -20,9 +20,6 @@
     <!-- [RECORRIDO] Estilos del recorrido interactivo -->
     <link rel="stylesheet" href="CSS/Recorrido.css">
 
-    <!-- [NUEVO] Estilos del modal "Iniciar sesión" -->
-    <link rel="stylesheet" href="CSS/IniciarSesion.css">
-
     <!-- [NUEVO] Estilos en línea para asegurar que el modal funcione incluso si el CSS externo falla -->
     <style>
         /* [NUEVO] Ocultar modales por defecto */
@@ -169,11 +166,37 @@
     </div>
 
     <!-- ================================================================= -->
+    <!-- [NUEVO] POP-UP: CERRAR SESIÓN (confirmación)                      -->
+    <!-- Se abre desde Iniciarsesion.js al tocar "Cerrar sesión (nombre)". -->
+    <!-- ================================================================= -->
+    <div id="modalCerrarSesion" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="btn-atras" onclick="cerrarModal('modalCerrarSesion')">◀ Atrás</button>
+                <h2>Cerrar sesión</h2>
+            </div>
+
+            <div class="modal-body">
+                <p class="modal-pregunta">¿Estás seguro?</p>
+                <p class="modal-detalle">Vas a cerrar la sesión de <span id="nombreCerrarSesion"></span>.</p>
+
+                <div class="modal-botones">
+                    <button class="btn-si" onclick="confirmarCerrarSesion()">Sí</button>
+                    <button class="btn-accion btn-no" onclick="cerrarModal('modalCerrarSesion')">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
     <!-- [NUEVO] LÓGICA DE JAVASCRIPT (Simulación de Base de Datos)        -->
     <!-- ================================================================= -->
     <script src="JS/SimulaciónBD.js"></script>
     <!-- [RECORRIDO] Lógica del recorrido interactivo -->
     <script src="JS/Recorrido.js"></script>
+    <!-- [NUEVO] Supabase: librería + configuración compartida (deben ir antes de IniciarSesion.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="JS/SupabaseConfig.js"></script>
     <!-- [NUEVO] Lógica del modal "Iniciar sesión" -->
     <script src="JS/IniciarSesion.js"></script>
 </body>
