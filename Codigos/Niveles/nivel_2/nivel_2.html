@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Nivel - 1</title>
+  <title>Nivel - 2</title>
   <link rel="stylesheet" href="nivel_2.css" />
 </head>
 <body>
@@ -11,17 +11,17 @@
   <section class="pantalla-niveles">
 
     <!-- Secuencia de fondo a pantalla completa. Arranca mostrando
-         "Fondo inclinado - Nivel 1" (toma de la torre completa) y, a los 3s,
-         hace un cross-fade con "Fondo superior - Nivel 1" (bandeja vacía).
-         Cuando el jugador coloca la placa madre, herramientas_nivel_1.js le
-         agrega una clase a ".fondo-marco" que dispara OTRO cross-fade hacia
-         "Fondo superior - Nivel 2", que ya trae la placa dibujada en su
-         posición/rotación final correcta (encarada hacia la placa de
-         puertos del gabinete) -- por eso ya no hace falta un sprite aparte
-         para la placa "colocada": el propio fondo la muestra. Las tres
-         imágenes comparten la misma proporción real (521x260), así que
-         ".fondo-marco" respeta esa proporción para que la zona interactiva
-         calce siempre con el dibujo, sea cual sea el tamaño de pantalla. -->
+         "Fondo inclinado - Nivel 2" (toma de la torre completa) y, a los 3s,
+         hace un cross-fade con "Fondo superior - Nivel 2" (bandeja con la
+         placa madre ya montada y el zócalo de la CPU vacío). Cuando el
+         jugador coloca la CPU, herramientas_nivel_2.js le agrega una clase a
+         ".fondo-marco" que dispara OTRO cross-fade hacia "Fondo superior -
+         Nivel 3", que ya trae la CPU dibujada en su lugar y deja a la vista
+         las dos ranuras de RAM que hay justo debajo -- por eso no hace falta
+         un sprite aparte para la CPU "colocada": el propio fondo la muestra. Las tres imágenes comparten la misma proporción real
+         (521x260), así que ".fondo-marco" respeta esa proporción para que la
+         zona interactiva calce siempre con el dibujo, sea cual sea el tamaño
+         de pantalla. -->
     <div class="fondo-marco">
       <img
         src="../../../Recursos_Gráficos/Sprites/CPU/Fondo inclinado - Nivel 2.png"
@@ -31,24 +31,54 @@
       />
       <img
         src="../../../Recursos_Gráficos/Sprites/CPU/Fondo superior - Nivel 2.png"
-        alt="Vista cercana de la bandeja de montaje de la placa madre, todavía vacía"
+        alt="Vista cercana de la placa madre montada, con el zócalo de la CPU todavía vacío"
         class="fondo-capa fondo-superior"
       />
       <img
         src="../../../Recursos_Gráficos/Sprites/RAM/Fondo superior - Nivel 3.png"
-        alt="Placa madre ya colocada y encarada hacia la placa de puertos del gabinete"
+        alt="CPU ya colocada en su zócalo"
         class="fondo-capa fondo-superior-n2"
       />
 
       <div class="zona-placa-madre">
         <span class="zona-placa-madre__etiqueta">Zona de la CPU</span>
-
-        <!-- Los 5 puntos de fijación para los tornillos: 4 en las esquinas
-             y 1 en el medio del borde derecho. Arrancan ocultos (ver CSS
-             ".placa-colocada .punto-tornillo") y solo se revelan una vez
-             que la placa madre ya está puesta. -->
-        <button type="button" class="punto-presion punto-presion--1" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 1"></button>
       </div>
+
+      <!-- ETAPA 2 (RAM). Sprite "RAM agarrando - Nivel 3": la memoria vista
+           desde arriba, dibujada sobre la ranura 1 de un lienzo de 521x260
+           (igual que los fondos). Hay una por ranura; la de la ranura 2 se
+           corre 10 px hacia abajo (ver CSS). Arrancan ocultas y se muestran
+           cuando se coloca la RAM en esa ranura (herramientas_nivel_2.js). Si el
+           sprite ya viniera recortado, el JS lo ajusta al tamaño de la ranura. -->
+      <img
+        src="../../../Recursos_Gráficos/Sprites/RAM/RAM agarrando - Nivel 3.png"
+        alt=""
+        class="fondo-capa ram-instalada ram-instalada--1"
+        aria-hidden="true"
+      />
+      <img
+        src="../../../Recursos_Gráficos/Sprites/RAM/RAM agarrando - Nivel 3.png"
+        alt=""
+        class="fondo-capa ram-instalada ram-instalada--2"
+        aria-hidden="true"
+      />
+
+      <!-- Las dos ranuras de RAM, justo debajo de la CPU en "Fondo superior -
+           Nivel 3". Aceptan cualquiera de las dos memorias, en cualquier
+           orden. Cuando las dos están ocupadas se activan los 4 seguros
+           (".clip-ram") y hay que presionarlos TODOS para completar el
+           nivel; después de una espera de 2 s, misiones_nivel_2.js pasa a la
+           intermisión. -->
+      <button type="button" class="socket-ram socket-ram--1" data-ocupado="false" aria-label="Ranura de RAM 1"></button>
+      <button type="button" class="socket-ram socket-ram--2" data-ocupado="false" aria-label="Ranura de RAM 2"></button>
+
+      <!-- ETAPA 3: los 4 "seguros" blancos (2 a cada lado de cada ranura) que
+           en una RAM real se presionan para encajarla. Solo se activan
+           cuando las dos RAM ya están colocadas; hay que presionar los 4. -->
+      <button type="button" class="clip-ram clip-ram--1-izq" aria-label="Seguro izquierdo de la RAM 1"></button>
+      <button type="button" class="clip-ram clip-ram--1-der" aria-label="Seguro derecho de la RAM 1"></button>
+      <button type="button" class="clip-ram clip-ram--2-izq" aria-label="Seguro izquierdo de la RAM 2"></button>
+      <button type="button" class="clip-ram clip-ram--2-der" aria-label="Seguro derecho de la RAM 2"></button>
     </div>
 
     <!-- Panel de misiones, paso a paso -->
@@ -57,24 +87,25 @@
       <ol class="panel-misiones__lista">
         <li class="mision" data-mision="colocar-placa">
           <span class="mision__marca"></span>
-          <span class="mision__texto">Colocar la placa madre</span>
+          <span class="mision__texto">Colocar la CPU</span>
         </li>
-        <li class="mision oculta" data-mision="colocar-tornillos">
+        <li class="mision oculta" data-mision="colocar-ram">
           <span class="mision__marca"></span>
-          <span class="mision__texto">Colocar los 5 tornillos</span>
+          <span class="mision__texto">Colocar la RAM (0/2)</span>
         </li>
-        <li class="mision oculta" data-mision="ajustar-tornillos">
+        <li class="mision oculta" data-mision="presionar-ram">
           <span class="mision__marca"></span>
-          <span class="mision__texto">Ajustar los tornillos</span>
+          <span class="mision__texto">Presionar los seguros de la RAM (0/4)</span>
         </li>
       </ol>
     </aside>
 
     <div class="barra-herramientas" role="toolbar" aria-label="Herramientas del nivel">
-      <!-- Cada herramienta tiene data-herramienta + data-uso (o
-           data-usos-restantes para las que se gastan). "placa-madre" y
-           "tornillo" se pueden arrastrar (drag) directo a su destino, o
-           seleccionar con click y después click en el destino. -->
+      <!-- Cada herramienta tiene data-herramienta + data-uso. Se pueden
+           arrastrar (drag) directo a su destino, o seleccionar con click y
+           después click en el destino. Primero va la CPU; las dos RAM
+           arrancan bloqueadas (data-bloqueado) y se desbloquean al colocar
+           la CPU. -->
       <button
         type="button"
         class="barra-herramientas__item"
@@ -84,23 +115,30 @@
         <img src="../../../Recursos_Gráficos/Sprites/CPU/CPU_Frente.png" alt="CPU" />
       </button>
 
+      <!-- "Herramientas icono RAM - Nivel 3.png" es un lienzo de 521x260 con
+           el ícono en un rincón: el <span> lo recorta (ver CSS ".icono-ram"). -->
       <button
         type="button"
         class="barra-herramientas__item"
-        data-herramienta="destornillador"
-        data-uso="ilimitado"
+        data-herramienta="ram"
+        data-uso="unico"
+        data-bloqueado="true"
       >
-        <img src="../../../Recursos_Gráficos/Sprites/Herramientas/Destornillador.png" alt="Destornillador" />
+        <span class="icono-ram">
+          <img src="../../../Recursos_Gráficos/Sprites/RAM/Herramientas icono RAM - Nivel 3.png" alt="Memoria RAM" />
+        </span>
       </button>
 
       <button
         type="button"
         class="barra-herramientas__item"
-        data-herramienta="tornillo"
-        data-usos-restantes="5"
+        data-herramienta="ram"
+        data-uso="unico"
+        data-bloqueado="true"
       >
-        <img src="../../../Recursos_Gráficos/Sprites/herramientas/tornillo.png" alt="Tornillo" />
-        <span class="barra-herramientas__contador">5</span>
+        <span class="icono-ram">
+          <img src="../../../Recursos_Gráficos/Sprites/RAM/Herramientas icono RAM - Nivel 3.png" alt="Memoria RAM" />
+        </span>
       </button>
 
       <div class="barra-herramientas__item"></div>
@@ -145,11 +183,10 @@
   </section>
 
   <!-- Secuencia de fondo (fade del "Fondo inclinado" hacia el "Fondo superior") -->
-  <script src="JS/secuencia_fondo_nivel_2.js.
-  "></script>
-  <!-- Lógica de selección/arrastre y uso de herramientas -->
+  <script src="JS/secuencia_fondo_nivel_2.js"></script>
+  <!-- Lógica de selección/arrastre y colocación de la CPU y las RAM -->
   <script src="JS/herramientas_nivel_2.js"></script>
-  <!-- Panel de misiones paso a paso -->
+  <!-- Panel de misiones (al completar la última, espera 2 s y pasa a la intermisión) -->
   <script src="JS/misiones_nivel_2.js"></script>
   <script src="JS/nivel_2.js"></script>
   <script src="JS/puntaje_nivel_2.js"></script>

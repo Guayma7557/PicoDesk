@@ -1,11 +1,12 @@
 /* ==========================================================================
-   secuencia-fondo-nivel1.js
-   Introducción visual del nivel: "Fondo inclinado - Nivel 1" cubre toda la
+   secuencia_fondo_nivel_2.js
+   Introducción visual del nivel: "Fondo inclinado - Nivel 2" cubre toda la
    pantalla y, a los 3 segundos, hace un cross-fade con "Fondo superior -
-   Nivel 1" (una se apaga mientras la otra se prende al mismo tiempo). La
-   zona de la placa madre (marco rojo + etiqueta) aparece en ese mismo
-   momento; los puntos de fijación siguen ocultos hasta que se coloca la
-   placa madre (ver herramientas_nivel_1.js).
+   Nivel 2" (una se apaga mientras la otra se prende al mismo tiempo). La
+   zona de la CPU (marco rojo + etiqueta) aparece en ese mismo momento.
+   Cuando se coloca la CPU, herramientas_nivel_2.js dispara el siguiente
+   cross-fade (hacia "Fondo superior - Nivel 3") y deja a la vista las
+   ranuras de RAM.
    ========================================================================== */
 
 (function () {
