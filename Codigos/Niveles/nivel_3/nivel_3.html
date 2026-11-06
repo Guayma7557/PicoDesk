@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Nivel - 3</title>
+  <link rel="stylesheet" href="nivel_3.css" />
+</head>
+<body>
+
+  <section class="pantalla-niveles">
+
+    <!-- Secuencia de fondo a pantalla completa. Arranca mostrando "Fondo
+         inclinado - Nivel 4" (toma de la torre completa) y, a los 3 s, hace
+         un cross-fade con "Fondo superior - Nivel 4" (la placa madre con la
+         CPU y la RAM ya instaladas y las dos ranuras de la GPU vacías).
+         Cuando se colocan las dos GPU, herramientas_nivel_3.js le agrega la
+         clase "gpu-listo" a ".fondo-marco", que hace aparecer
+         "Fondo superior - GPU" (las dos GPU ya instaladas). Después sigue el
+         disco duro (sprites propios, ver más abajo). Las imágenes
+         comparten la misma proporción real (521x260), así que
+         ".fondo-marco" respeta esa proporción para que las zonas
+         interactivas calcen siempre con el dibujo, sea cual sea el tamaño de
+         pantalla.
+
+         TODAS las zonas interactivas (ranuras y zonas a presionar) se posicionan con
+         estilos en línea "--x --y --w --h", medidos en píxeles del arte
+         (521x260). Para agregar otro componente basta con medir el arte y
+         copiar el patrón del disco duro: no hace falta tocar el JS. -->
+    <div class="fondo-marco">
+      <img
+        src="../../../Recursos_Gráficos/Sprites/Disco_duro/Fondo inclinado - Nivel 4.png"
+        alt=""
+        class="fondo-capa fondo-inclinado"
+        aria-hidden="true"
+      />
+      <img
+        src="../../../Recursos_Gráficos/Sprites/Disco_duro/Fondo superior - Nivel 4.png"
+        alt="Vista cercana de la placa madre con la CPU y la RAM ya instaladas y las dos ranuras de la GPU todavía vacías"
+        class="fondo-capa fondo-superior"
+      />
+      <img
+        src="../../../Recursos_Gráficos/Sprites/gpu/Fondo superior - GPU.png"
+        alt="Las dos GPU ya instaladas en sus ranuras"
+        class="fondo-capa fondo-etapa fondo-etapa--gpu"
+      />
+
+      <!-- ==================================================================
+           COMPONENTE 1: GPU  (data-componente="gpu")
+           Mismo esquema que la RAM del nivel 2: hay 2 ranuras y 2 GPU en la
+           barra; cualquiera entra en cualquier ranura, en cualquier orden.
+           Cuando están las dos colocadas, cada GPU entera pasa a ser un botón
+           (halo amarillo) y hay que presionar las dos, como se encaja una
+           tarjeta real.
+           ================================================================== -->
+
+      <!-- Sprite "gpu arrastrando": la GPU vista desde arriba. Viene dibujada
+           sobre la ranura 1 de un lienzo de 521x260; la de la ranura 2 se
+           corre 22 px a la derecha (--dx). Arrancan ocultas y se muestran al
+           colocar la GPU en esa ranura. "data-recorte" = x,y,ancho,alto del
+           dibujo dentro del lienzo (respaldo; el JS lo mide si puede). -->
+      <img
+        src="../../../Recursos_Gráficos/Sprites/gpu/gpu arrastrando.png"
+        alt=""
+        class="fondo-capa instalado"
+        data-componente="gpu"
+        data-recorte="241,14,19,98"
+        aria-hidden="true"
+      />
+      <img
+        src="../../../Recursos_Gráficos/Sprites/gpu/gpu arrastrando.png"
+        alt=""
+        class="fondo-capa instalado"
+        data-componente="gpu"
+        data-recorte="241,14,19,98"
+        style="--dx: 22"
+        aria-hidden="true"
+      />
+
+      <!-- Ranuras: el lugar que ocupa cada GPU (19x98 px del arte). -->
+      <button
+        type="button"
+        class="socket"
+        data-componente="gpu"
+        data-ocupado="false"
+        style="--x: 240; --y: 14; --w: 19; --h: 98"
+        aria-label="Ranura de GPU 1"
+      ></button>
+      <button
+        type="button"
+        class="socket"
+        data-componente="gpu"
+        data-ocupado="false"
+        style="--x: 262; --y: 14; --w: 19; --h: 98"
+        aria-label="Ranura de GPU 2"
+      ></button>
+
+      <!-- Zonas a presionar: la GPU ENTERA (19x98 px del arte, la misma área
+           que su ranura), porque así se encaja una tarjeta real. Se activan
+           cuando las dos GPU están colocadas; hay que presionar las dos. -->
+      <button type="button" class="presionable" data-componente="gpu" style="--x: 240; --y: 14; --w: 19; --h: 98" aria-label="Presionar la GPU 1"></button>
+      <button type="button" class="presionable" data-componente="gpu" style="--x: 262; --y: 14; --w: 19; --h: 98" aria-label="Presionar la GPU 2"></button>
+
+      <!-- ==================================================================
+           COMPONENTE 2: DISCO DURO  (data-componente="disco")
+           Tres fases (ver herramientas_nivel_3.js):
+             1) COLOCAR: se arrastra el ícono de la barra a la bahía. El sprite
+                "Disco duro superior" ya viene dibujado en su lugar (lienzo de
+                521x260), así que no se corre.
+             2) PRESIONAR: click sobre el disco; se achica un poco (efecto de
+                profundidad, ver CSS ".instalado--presionado").
+             3) DESLIZAR: aparece una flecha a la izquierda del disco y hay que
+                arrastrarlo hacia la derecha, DEBAJO del rack: el sprite
+                "Racks de disco" (idéntico al rack del fondo) está siempre
+                encima del disco, así que al deslizar su extremo derecho se
+                mete bajo el borde del rack.
+           Las auras y flechas son ".guia": data-fases dice en qué fases se ven
+           y data-frame="1|2" son los dos cuadros que parpadean.
+           ================================================================== -->
+
+      <!-- Rack: siempre ENCIMA del disco, pero solo se ve la parte desde
+           --clip-x (386 = donde termina la bahía y empieza la chapa del rack,
+           en px del arte). Es idéntico al fondo, así que no se nota hasta
+           que el disco se desliza por debajo. -->
+      <img
+        src="../../../Recursos_Gráficos/Sprites/Disco_duro/Racks de disco - Nivel 4.png"
+        alt=""
+        class="fondo-capa rack-superior"
+        data-componente="disco"
+        style="--clip-x: 386"
+        aria-hidden="true"
+      />
+
+      <!-- Sprite del disco ya colocado. --cx/--cy = centro del dibujo (px del
+           arte): el punto desde el cual se achica al presionarlo. -->
+      <img
+        src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco duro superior - Nivel 4.png"
+        alt=""
+        class="fondo-capa instalado"
+        data-componente="disco"
+        data-recorte="326,90,60,16"
+        style="--cx: 356; --cy: 98"
+        aria-hidden="true"
+      />
+
+      <!-- Aura alrededor de la bahía (2 cuadros que alternan): guía en las tres
+           fases. -->
+      <img src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco aura 1 - Nivel 4.png" alt="" class="fondo-capa guia" data-componente="disco" data-fases="colocar presionar deslizar" data-frame="1" aria-hidden="true" />
+      <img src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco aura 2 - Nivel 4.png" alt="" class="fondo-capa guia" data-componente="disco" data-fases="colocar presionar deslizar" data-frame="2" aria-hidden="true" />
+
+      <!-- Flecha hacia abajo sobre el disco: "presionalo". -->
+      <img src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco flecha 1 - Nivel 4.png" alt="" class="fondo-capa guia" data-componente="disco" data-fases="presionar" data-frame="1" aria-hidden="true" />
+      <img src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco flecha 2 - Nivel 4.png" alt="" class="fondo-capa guia" data-componente="disco" data-fases="presionar" data-frame="2" aria-hidden="true" />
+
+      <!-- Flecha hacia la derecha a la izquierda del disco: "deslizalo así".
+           Es la misma flecha, girada -90° por CSS: --cx/--cy = su centro y
+           --tx/--ty = cuánto se mueve (px del arte) hasta su lugar. -->
+      <img src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco flecha 1 - Nivel 4.png" alt="" class="fondo-capa guia guia--flecha-der" data-componente="disco" data-fases="deslizar" data-frame="1" style="--cx: 357; --cy: 81.5; --tx: -38; --ty: 16.5" aria-hidden="true" />
+      <img src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco flecha 2 - Nivel 4.png" alt="" class="fondo-capa guia guia--flecha-der" data-componente="disco" data-fases="deslizar" data-frame="2" style="--cx: 357; --cy: 81.5; --tx: -38; --ty: 16.5" aria-hidden="true" />
+
+      <!-- Bahía donde va el disco (misma área que el aura). El aura hace de
+           guía, así que no lleva el marco rojo (data-sin-halo). -->
+      <button
+        type="button"
+        class="socket"
+        data-componente="disco"
+        data-ocupado="false"
+        data-sin-halo
+        style="--x: 324; --y: 88; --w: 64; --h: 20"
+        aria-label="Bahía del disco duro"
+      ></button>
+
+      <!-- Zona a presionar: el disco (60x16 px del arte). -->
+      <button
+        type="button"
+        class="presionable"
+        data-componente="disco"
+        data-sin-halo
+        style="--x: 326; --y: 90; --w: 60; --h: 16"
+        aria-label="Presionar el disco duro"
+      ></button>
+
+      <!-- Zona de agarre para deslizar: el disco otra vez; se mueve con él.
+           data-deslizar-max = cuántos px del arte se desliza hacia la derecha
+           (12 = el extremo derecho del disco, ya achicado, queda bajo el
+           borde del rack). -->
+      <button
+        type="button"
+        class="deslizable"
+        data-componente="disco"
+        data-deslizar-max="12"
+        style="--x: 326; --y: 90; --w: 60; --h: 16"
+        aria-label="Deslizar el disco duro hacia la derecha"
+      ></button>
+
+      <!-- ==================================================================
+           COMPONENTE 3 (por ahora no hay): para agregar otro, copiar el
+           patrón de arriba con otro data-componente y completar sus
+           herramientas en la barra y sus misiones en el panel.
+           ================================================================== -->
+    </div>
+
+    <!-- Panel de misiones, paso a paso. Cada misión indica a qué componente
+         y a qué fase pertenece (data-componente / data-fase). El "(0/2)" del
+         texto lo va actualizando misiones_nivel_3.js. Las del disco duro
+         aparecen recién cuando se completa la GPU. -->
+    <aside class="panel-misiones" aria-label="Misiones del nivel">
+      <h2 class="panel-misiones__titulo">Misiones</h2>
+      <ol class="panel-misiones__lista">
+        <li class="mision" data-mision="gpu-colocar" data-componente="gpu" data-fase="colocar">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Colocar la GPU (0/2)</span>
+        </li>
+        <li class="mision oculta" data-mision="gpu-presionar" data-componente="gpu" data-fase="presionar">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Presionar la GPU (0/2)</span>
+        </li>
+        <li class="mision oculta" data-mision="disco-colocar" data-componente="disco" data-fase="colocar">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Colocar el disco duro (0/1)</span>
+        </li>
+        <li class="mision oculta" data-mision="disco-presionar" data-componente="disco" data-fase="presionar">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Presionar el disco duro (0/1)</span>
+        </li>
+        <li class="mision oculta" data-mision="disco-deslizar" data-componente="disco" data-fase="deslizar">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Deslizar el disco duro bajo el rack (0/1)</span>
+        </li>
+      </ol>
+    </aside>
+
+    <div class="barra-herramientas" role="toolbar" aria-label="Herramientas del nivel">
+      <!-- Cada herramienta tiene data-herramienta (= el data-componente al
+           que pertenece) + data-uso. El orden de la barra es el orden de las
+           etapas del nivel. Se pueden arrastrar (drag) directo a su
+           ranura, o seleccionar con click y después click en la ranura.
+           "gpu icono.png" es un lienzo de 521x260 con el ícono ocupando casi
+           todo: el <span> lo recorta a su dibujo (ver CSS ".icono-herramienta")
+           y "data-recorte" es el respaldo x,y,ancho,alto. -->
+      <button
+        type="button"
+        class="barra-herramientas__item"
+        data-herramienta="gpu"
+        data-uso="unico"
+      >
+        <span class="icono-herramienta" data-etiqueta="GPU">
+          <img src="../../../Recursos_Gráficos/Sprites/gpu/gpu icono.png" alt="Tarjeta gráfica (GPU)" data-recorte="5,0,500,260" />
+        </span>
+      </button>
+
+      <button
+        type="button"
+        class="barra-herramientas__item"
+        data-herramienta="gpu"
+        data-uso="unico"
+      >
+        <span class="icono-herramienta" data-etiqueta="GPU">
+          <img src="../../../Recursos_Gráficos/Sprites/gpu/gpu icono.png" alt="Tarjeta gráfica (GPU)" data-recorte="5,0,500,260" />
+        </span>
+      </button>
+
+      <!-- Disco duro (componente 2). Arranca bloqueado: se habilita al completar
+           la GPU. "Disco duro icon" es un lienzo de 521x260 con el dibujo (46x59)
+           en una esquina; ".icono-herramienta" lo recorta y, como es más alto
+           que ancho, lo ajusta por el alto del casillero. -->
+      <button
+        type="button"
+        class="barra-herramientas__item"
+        data-herramienta="disco"
+        data-uso="unico"
+        data-bloqueado="true"
+      >
+        <span class="icono-herramienta" data-etiqueta="HDD">
+          <img src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco duro icon - Nivel 4.png" alt="Disco duro" data-recorte="334,182,46,59" />
+        </span>
+      </button>
+
+      <!-- Casilleros libres para futuras herramientas. -->
+      <div class="barra-herramientas__item" data-reservado="libre"></div>
+      <div class="barra-herramientas__item" data-reservado="libre"></div>
+    </div>
+    <div class="barra-lateral">
+      <!-- Botón para salir: triángulo -->
+      <button type="button" class="boton-salir" aria-label="Salir"></button>
+
+      <div
+        class="barra-progreso"
+        role="progressbar"
+        aria-valuenow="0"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-label="Progreso del nivel"
+      >
+        <div class="barra-progreso__relleno" style="--progreso: 0%"></div>
+      </div>
+    </div>
+
+  <div class="overlay-confirmacion" aria-hidden="true">
+      <div
+        class="dialogo-confirmacion"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="dialogo-confirmacion-texto"
+      >
+        <p id="dialogo-confirmacion-texto" class="dialogo-confirmacion__texto">
+          ¿Estas seguro de salir?
+        </p>
+ 
+        <div class="dialogo-confirmacion__opciones">
+          <!-- "Sí": texto interactivo -->
+          <button type="button" class="dialogo-confirmacion__si">Si</button>
+ 
+          <!-- "No": botón rojo -->
+          <button type="button" class="dialogo-confirmacion__no">No</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Secuencia de fondo (fade del "Fondo inclinado" hacia el "Fondo superior") -->
+  <script src="JS/secuencia_fondo_nivel_3.js"></script>
+  <!-- Lógica de selección/arrastre/colocación de los componentes y de sus zonas a presionar -->
+  <script src="JS/herramientas_nivel_3.js"></script>
+  <!-- Panel de misiones (al completar la última, espera 2 s y pasa a la intermisión) -->
+  <script src="JS/misiones_nivel_3.js"></script>
+  <script src="JS/nivel_3.js"></script>
+  <script src="JS/puntaje_nivel_3.js"></script>
+</body>
+</html>
