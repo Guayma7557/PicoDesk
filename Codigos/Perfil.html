@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- -------------------- SEO BÁSICO -------------------- -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> PicoDesk - Perfil </title>
+
+    <!-- -------------------- FAVICON -------------------- -->
+    <!-- Misma ruta relativa que Registro.html y MenúPrincipal.html: se asume
+         que este archivo vive en la misma carpeta que esos dos. -->
+    <link rel="icon" href="../Recursos_Gráficos/Sprites/Icons/LOGO.ico">
+
+    <!-- -------------------- ESTILOS -------------------- -->
+    <!-- Registro.css aporta colores, fondo animado, header y escala fluida. -->
+    <link rel="stylesheet" href="CSS/Registro.css">
+
+    <!-- Estilos propios del perfil: van acá para que esta página no dependa de
+         que Registro.css esté actualizado (y sin crear un CSS más). -->
+    <style>
+        /* Avatar + nombre, centrados arriba */
+        .perfil-cabecera{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4em;
+            padding: clamp(1em, 4vh, 2.5em) 1em 0;
+        }
+
+        .perfil-avatar{
+            width: 6em;
+            height: 6em;
+            padding: 1em;
+            color: var(--ColorQuinto);
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+        }
+
+        .perfil-nombre{
+            font-size: 2.6em;
+            line-height: 1;
+            text-align: center;
+            overflow-wrap: anywhere;
+            color: #fff;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        /* Dos paneles oscuros: así el texto claro se lee bien sobre el degradé */
+        .perfil-cuerpo{
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            gap: clamp(1.5em, 4vw, 4em);
+            padding: clamp(1em, 3vh, 2.5em) clamp(1em, 6vw, 8em) clamp(1.5em, 4vh, 3em);
+        }
+
+        .perfil-panel{
+            flex: 1 1 0;
+            min-width: 0;
+            max-width: 34rem;
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.8em, 3vh, 1.8em);
+            padding: 1.2em 1.5em 1.6em;
+            background-color: rgba(30, 30, 30, 0.72);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .perfil-panel h2{
+            margin-bottom: 0.2em;
+            color: #fff;
+        }
+
+        .perfil-dato{
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 0.4em 1em;
+            padding: 0.4em 0.3em;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+        }
+
+        .perfil-etiqueta{
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.05em;
+        }
+
+        .perfil-valor{
+            color: #fff;
+            font-size: 1.05em;
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        @media (max-width: 700px){
+            .perfil-cuerpo{
+                flex-direction: column;
+                align-items: center;
+            }
+            .perfil-panel{
+                width: 100%;
+                max-width: 26rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="DecoracióndeRayas">
+        <div class="registro-pantalla">
+
+            <header class="registro-header">
+                <button type="button" id="btnVolver" class="btn-cancelar">◀ Volver</button>
+                <h1>Perfil</h1>
+                <button type="button" id="btnCerrarSesion" class="btn-registrar">Cerrar sesión</button>
+            </header>
+
+            <!-- Avatar y nombre completo (se completan con la sesión, ver Perfil.js) -->
+            <div class="perfil-cabecera">
+                <svg class="perfil-avatar" width="96" height="96" style="color:#E8E7E4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+                    <circle cx="12" cy="8" r="3.4"></circle>
+                    <path d="M5 20c0-3.6 3.1-6.2 7-6.2s7 2.6 7 6.2"></path>
+                </svg>
+                <h2 id="tituloPerfil" class="perfil-nombre"></h2>
+            </div>
+
+            <div class="perfil-cuerpo">
+
+                <section class="perfil-panel" aria-labelledby="tituloDatosPersonales">
+                    <h2 id="tituloDatosPersonales">Datos personales</h2>
+
+                    <div class="perfil-dato">
+                        <span class="perfil-etiqueta">Nombre:</span>
+                        <span class="perfil-valor" id="perfilNombre"></span>
+                    </div>
+                    <div class="perfil-dato">
+                        <span class="perfil-etiqueta">Apellido:</span>
+                        <span class="perfil-valor" id="perfilApellido"></span>
+                    </div>
+                    <div class="perfil-dato">
+                        <span class="perfil-etiqueta">DNI:</span>
+                        <span class="perfil-valor" id="perfilDni"></span>
+                    </div>
+                </section>
+
+                <section class="perfil-panel" aria-labelledby="tituloDatosEscolares">
+                    <h2 id="tituloDatosEscolares">Datos escolares</h2>
+
+                    <div class="perfil-dato">
+                        <span class="perfil-etiqueta">Establecimiento:</span>
+                        <span class="perfil-valor" id="perfilEstablecimiento"></span>
+                    </div>
+                    <div class="perfil-dato">
+                        <span class="perfil-etiqueta">Especialidad:</span>
+                        <span class="perfil-valor" id="perfilEspecialidad"></span>
+                    </div>
+                    <div class="perfil-dato">
+                        <span class="perfil-etiqueta">Curso:</span>
+                        <span class="perfil-valor" id="perfilCurso"></span>
+                    </div>
+                    <div class="perfil-dato">
+                        <span class="perfil-etiqueta">División:</span>
+                        <span class="perfil-valor" id="perfilDivision"></span>
+                    </div>
+                </section>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="JS/Perfil.js"></script>
+</body>
+</html>
