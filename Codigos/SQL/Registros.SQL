@@ -125,7 +125,8 @@ alter table public.intentos_login enable row level security;
 -- deshaga. Usa el mismo mensaje si el DNI no existe o la contraseña es
 -- incorrecta, así no se puede averiguar qué DNI están registrados.
 -- Respuestas:
---   {"ok": true,  "nombre": "...", "apellido": "..."}
+--   {"ok": true,  "dni", "nombre", "apellido", "establecimiento",
+--                  "especialidad", "curso", "division"}
 --   {"ok": false, "motivo": "credenciales"}   (DNI o contraseña incorrectos)
 --   {"ok": false, "motivo": "bloqueado"}      (demasiados intentos)
 -- --------------------------------------------------------------------------
@@ -144,6 +145,7 @@ declare
     v_hay_registro boolean;
     v_hay_intento  boolean;
     v_ok           boolean;
+    v_escolar      public."Info-Escolar"%rowtype;
 begin
     if p_dni is null or p_dni !~ '^[0-9]{7,8}$'
        or p_password is null or char_length(p_password) not between 1 and 72 then
@@ -178,10 +180,19 @@ begin
 
     if v_ok then
         delete from public.intentos_login where dni = p_dni;
+
+        -- Datos escolares de esta misma persona (si no tuviera, quedan en null).
+        select * into v_escolar from public."Info-Escolar" where dni = p_dni;
+
         return jsonb_build_object(
             'ok', true,
+            'dni', v_registro.dni,
             'nombre', v_registro.nombre,
-            'apellido', v_registro.apellido
+            'apellido', v_registro.apellido,
+            'establecimiento', v_escolar.establecimiento,
+            'especialidad', v_escolar.especialidad,
+            'curso', v_escolar.curso,
+            'division', v_escolar.division
         );
     end if;
 
