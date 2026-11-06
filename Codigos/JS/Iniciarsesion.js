@@ -8,6 +8,7 @@
 /*      en Supabase (función iniciar_sesion de Registros.sql).        */
 /*   3) mostrar quién inició sesión en el botón del header, con la    */
 /*      opción de cerrar sesión (pide confirmación en un modal).      */
+/*   4) botón de cuenta (#Cuenta): abre el login o va al perfil.      */
 /* Requiere SupabaseConfig.js cargado antes (define window.PicoDeskDB) */
 /* ================================================================= */
 (function () {
@@ -19,6 +20,8 @@
     const inputContraseña = document.getElementById('inputContraseñaIniciarSesion');
     const botonIniciar = document.getElementById('btn-iniciar-sesion');
     const botonHeader = document.getElementById('IniciarSesión');
+    // [NUEVO] Botón redondo de cuenta (foto de perfil) del header.
+    const botonCuenta = document.getElementById('Cuenta');
 
     // Cliente de Supabase compartido (null si falta completar SupabaseConfig.js).
     const db = window.PicoDeskDB || null;
@@ -77,6 +80,24 @@
             botonHeader.textContent = 'Iniciar sesión';
             botonHeader.onclick = function () { abrirModal('modalIniciarSesion'); };
         }
+    }
+
+    // [NUEVO] Botón de cuenta (#Cuenta):
+    //   - sin sesión iniciada -> abre el mismo modal que "Iniciar sesión".
+    //   - con sesión iniciada -> va a la página de perfil.
+    // La sesión se consulta en el momento del clic, así siempre está al día.
+    // Ajustar PAGINA_PERFIL si el archivo se llama distinto o vive en otra carpeta.
+    const PAGINA_PERFIL = 'Perfil.html';
+
+    if (botonCuenta) {
+        botonCuenta.addEventListener('click', function () {
+            const sesion = leerSesion();
+            if (sesion && sesion.nombre) {
+                window.location.href = PAGINA_PERFIL;
+            } else {
+                abrirModal('modalIniciarSesion');
+            }
+        });
     }
 
     // DNI: solo números. Cualquier otro carácter que se escriba o pegue
@@ -157,7 +178,17 @@
             return;
         }
 
-        guardarSesion({ dni: dni, nombre: data.nombre, apellido: data.apellido });
+        // [MODIFICADO] Además del nombre, se guardan los datos escolares que
+        // devuelva la función iniciar_sesion (se muestran en Perfil.html).
+        guardarSesion({
+            dni: dni,
+            nombre: data.nombre,
+            apellido: data.apellido,
+            establecimiento: data.establecimiento,
+            especialidad: data.especialidad,
+            curso: data.curso,
+            division: data.division,
+        });
         inputDni.value = '';
         inputContraseña.value = '';
         actualizarBotonHeader();
