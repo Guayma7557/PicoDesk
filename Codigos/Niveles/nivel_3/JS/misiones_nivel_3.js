@@ -8,8 +8,9 @@
      Disco duro:  3) Colocar el disco duro
                   4) Presionar el disco duro
                   5) Deslizar el disco duro bajo el rack
+                  6) Conectar el cable del disco duro
    Cada <li> declara a qué componente y fase pertenece (data-componente /
-   data-fase: colocar, presionar o deslizar), así que las misiones de otro
+   data-fase: colocar, presionar, deslizar o conectar), así que las misiones de otro
    componente se agregan solo en el HTML, sin tocar este archivo.
    Al completarse la ÚLTIMA misión (barra al 100%) se espera
    DEMORA_REDIRECCION_MS (2 segundos) y recién entonces se pasa a la
@@ -119,5 +120,17 @@
 
   document.addEventListener("nivel3:deslizamientoCompleto", (evento) => {
     completarMision(buscarMision(evento.detail.componente, "deslizar"));
+  });
+
+  // Fase "conectar" (el cable): igual que las anteriores. Es la última misión
+  // del nivel: al completarla la barra llega a 100% y arranca la espera de
+  // 2 s hacia la intermisión.
+  document.addEventListener("nivel3:conectado", (evento) => {
+    const { componente, conectados, total } = evento.detail;
+    actualizarContador(buscarMision(componente, "conectar"), conectados, total);
+  });
+
+  document.addEventListener("nivel3:conexionCompleta", (evento) => {
+    completarMision(buscarMision(evento.detail.componente, "conectar"));
   });
 })();

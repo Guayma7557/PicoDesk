@@ -14,11 +14,15 @@
                                                         (la GPU entera, el disco...)
      .deslizable[data-componente="disco"]               (opcional) lo que hay que
                                                         deslizar después de presionar
+     .conexion[data-componente="disco"]                 (opcional) el extremo del
+                                                        cable que hay que arrastrar
+                                                        (lo maneja cable_nivel_3.js)
      .guia[data-componente="disco"]                     (opcional) auras y flechas
                                                         que guían al jugador
    El ORDEN de las etapas es el orden de la barra de herramientas.
 
-   Cada etapa tiene hasta tres fases (c.fase):
+   Cada etapa tiene hasta cuatro fases (c.fase), siempre en este orden y
+   saltando las que el componente no tiene:
      "colocar":   hay tantas herramientas como ranuras (GPU: 2 y 2; disco: 1 y 1).
                   Cualquier herramienta entra en cualquier ranura libre, en
                   cualquier orden.
@@ -31,6 +35,13 @@
                   del arte). Al terminar se le agrega la clase
                   "<componente>-deslizado" a ".fondo-marco" (para que el CSS
                   pueda reaccionar si hace falta).
+     "conectar":  solo si el componente tiene ".conexion". El jugador arrastra
+                  un cable hasta su destino manteniendo el botón apretado. Todo
+                  el dibujo y el arrastre lo hace cable_nivel_3.js; este archivo
+                  solo le avisa cuándo empezar ("faseConectar") y espera su
+                  aviso ("cableConectado"). Al terminar se le agrega la clase
+                  "<componente>-conectado" a ".fondo-marco" (el CSS muestra el
+                  fondo final de la etapa).
    Al completar la última fase la etapa está completa y se desbloquea la
    siguiente. Cuando se completa la última etapa, el nivel está completo
    (misiones_nivel_3.js se encarga de la espera y de la intermisión).
@@ -52,8 +63,13 @@
      nivel3:presionCompleta      { componente }                  (todas presionadas)
      nivel3:deslizado            { componente, deslizados, total }
      nivel3:deslizamientoCompleto { componente }                 (todas deslizadas)
+     nivel3:faseConectar         { componente }       (empieza la fase del cable)
+     nivel3:conectado            { componente, conectados, total }
+     nivel3:conexionCompleta     { componente }                  (todos conectados)
      nivel3:componenteCompletado { componente }                  (terminó la etapa)
      nivel3:nivelCompletado      {}                    (se completó la última etapa)
+   Los avisos que llegan desde cable_nivel_3.js:
+     nivel3:cableConectado       { componente }               (el cable llegó a su destino)
    Además, al terminar de colocar un componente se le agrega la clase
    "<componente>-listo" a ".fondo-marco" (ej. "gpu-listo"), que usa el CSS
    para el cross-fade al fondo de esa etapa.
@@ -96,7 +112,7 @@
     const id = item.dataset.herramienta;
     let c = componentes.find((x) => x.id === id);
     if (!c) {
-      c = { id, items: [], sockets: [], presionables: [], deslizables: [], guias: [], instalados: [] };
+      c = { id, items: [], sockets: [], presionables: [], deslizables: [], conexiones: [], guias: [], instalados: [] };
       componentes.push(c);
     }
     c.items.push(item);
@@ -110,13 +126,15 @@
     c.sockets = elementosDe("socket", c.id);
     c.presionables = elementosDe("presionable", c.id);
     c.deslizables = elementosDe("deslizable", c.id);
+    c.conexiones = elementosDe("conexion", c.id);
     c.guias = elementosDe("guia", c.id);
     c.instalados = elementosDe("instalado", c.id);
     c.total = Math.min(c.items.length, c.sockets.length);
     c.colocados = 0;
     c.presionados = 0;
     c.deslizados = 0;
-    c.fase = null; // "colocar" | "presionar" | "deslizar" | "completo" (null = bloqueado)
+    c.conectados = 0;
+    c.fase = null; // "colocar" | "presionar" | "deslizar" | "conectar" | "completo" (null = bloqueado)
     c.desbloqueado = false;
     c.completo = false;
   });
@@ -328,6 +346,39 @@
     actualizarGuias(c);
   }
 
+  // Orden de las fases y cuáles tiene cada componente (según los elementos que
+  // declara en el HTML). "colocar" siempre está.
+  const ORDEN_FASES = ["colocar", "presionar", "deslizar", "conectar"];
+
+  function fasesDe(c) {
+    return ORDEN_FASES.filter(
+      (f) =>
+        f === "colocar" ||
+        (f === "presionar" && c.presionables.length) ||
+        (f === "deslizar" && c.deslizables.length) ||
+        (f === "conectar" && c.conexiones.length)
+    );
+  }
+
+  // Pasa a la fase siguiente que tenga el componente y activa lo que esa fase
+  // necesita; si no queda ninguna, la etapa está completa.
+  function avanzarFase(c) {
+    const fases = fasesDe(c);
+    const siguiente = fases[fases.indexOf(c.fase) + 1];
+
+    if (!siguiente) {
+      completarComponente(c);
+      return;
+    }
+    if (siguiente === "presionar") {
+      c.presionables.forEach((p) => p.classList.add("presionable--activo"));
+    } else if (siguiente === "deslizar") {
+      c.deslizables.forEach((d) => d.classList.add("deslizable--activo"));
+    }
+    cambiarFase(c, siguiente);
+    if (siguiente === "conectar") emitir("faseConectar", { componente: c.id });
+  }
+
   function desbloquear(c) {
     c.desbloqueado = true;
     c.items.forEach((i) => delete i.dataset.bloqueado);
@@ -339,6 +390,10 @@
   function completarComponente(c) {
     c.completo = true;
     cambiarFase(c, "completo");
+    // La etapa terminó: las zonas a presionar ya no hacen falta y sus marcas
+    // (verde) se desvanecen, para no tapar lo que sigue (ej. el disco duro,
+    // que arranca sobre la GPU).
+    c.presionables.forEach((p) => p.classList.add("presionable--terminado"));
     emitir("componenteCompletado", { componente: c.id });
 
     const siguiente = etapas[etapas.indexOf(c) + 1];
@@ -374,10 +429,9 @@
     if (c.colocados >= c.total) {
       // Todo colocado: cambia el fondo de la etapa y se activan las zonas a presionar.
       marco.classList.add(`${c.id}-listo`);
-      c.presionables.forEach((p) => p.classList.add("presionable--activo"));
       emitir("colocacionCompleta", { componente: c.id });
       if (c.presionables.length) {
-        cambiarFase(c, "presionar");
+        avanzarFase(c);
       } else {
         terminarPresion(c); // nada que presionar: se pasa a la fase siguiente
       }
@@ -413,16 +467,11 @@
     return true;
   }
 
-  // Terminó la fase de presionar: si el componente tiene algo para deslizar
-  // se pasa a esa fase; si no, la etapa está completa.
+  // Terminó la fase de presionar (o el componente no la tiene): se pasa a la
+  // fase siguiente que tenga, o la etapa está completa.
   function terminarPresion(c) {
     emitir("presionCompleta", { componente: c.id });
-    if (c.deslizables.length) {
-      c.deslizables.forEach((d) => d.classList.add("deslizable--activo"));
-      cambiarFase(c, "deslizar");
-    } else {
-      completarComponente(c);
-    }
+    avanzarFase(c);
   }
 
   /* ------------------------------------------------------------------------
@@ -432,7 +481,7 @@
      ------------------------------------------------------------------------ */
 
   function maximoDeslizar(zona) {
-    return Number(zona.dataset.deslizarMax) || 12;
+    return Number(zona.dataset.deslizarMax) || 56;
   }
 
   function asignarDeslizamiento(c, zona, valor) {
@@ -460,9 +509,33 @@
       // Todo deslizado: el rack ya estaba encima, así que la pieza queda "debajo".
       marco.classList.add(`${c.id}-deslizado`);
       emitir("deslizamientoCompleto", { componente: c.id });
-      completarComponente(c);
+      avanzarFase(c);
     }
   }
+
+  /* ------------------------------------------------------------------------
+     Fase "conectar": la maneja cable_nivel_3.js (dibujo y arrastre). Acá solo
+     se espera su aviso de que el cable llegó a destino.
+     ------------------------------------------------------------------------ */
+
+  document.addEventListener("nivel3:cableConectado", (evento) => {
+    const c = etapaDe(evento.detail.componente);
+    if (!c || c.fase !== "conectar") return;
+
+    c.conectados += 1;
+    emitir("conectado", {
+      componente: c.id,
+      conectados: c.conectados,
+      total: c.conexiones.length,
+    });
+
+    if (c.conectados >= c.conexiones.length) {
+      // Todo conectado: el CSS muestra el fondo final de la etapa.
+      marco.classList.add(`${c.id}-conectado`);
+      emitir("conexionCompleta", { componente: c.id });
+      avanzarFase(c);
+    }
+  });
 
   function iniciarDeslizar(c, zona, eventoInicial) {
     if (!zona.classList.contains("deslizable--activo")) return;

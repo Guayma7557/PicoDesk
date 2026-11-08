@@ -319,6 +319,7 @@ button {
 }
 
 .fondo-etapa--gpu,
+.fondo-etapa--final,
 .instalado[data-componente="gpu"] {
   --desfase-x: var(--desfase-gpu-x);
 }
@@ -333,6 +334,14 @@ button {
 }
 
 .fondo-marco.gpu-listo .fondo-etapa--gpu {
+  opacity: 1;
+}
+
+/* "Fondo superior - Nivel 5": el estado final del nivel (GPU instaladas, disco
+   duro asomando bajo el rack y su cable rojo conectado). Está dibujado en la
+   misma grilla corrida que el arte de la GPU, de ahí el mismo desfase. Hace
+   fade-in cuando se conecta el cable. */
+.fondo-marco.disco-conectado .fondo-etapa--final {
   opacity: 1;
 }
 
@@ -367,7 +376,8 @@ button {
 /* Geometría genérica de ranuras y zonas a presionar: --x --y --w --h inline. */
 .socket,
 .presionable,
-.deslizable {
+.deslizable,
+.conexion {
   position: absolute;
   left: calc(var(--x) * 100% / 521);
   top: calc(var(--y) * 100% / 260);
@@ -442,6 +452,13 @@ button {
   background-color: rgba(255, 210, 63, 0.5);
 }
 
+/* Etapa terminada: la marca verde se desvanece (con un pequeño retraso para
+   que se vea la confirmación del último click). */
+.presionable.presionable--terminado {
+  opacity: 0;
+  transition: opacity 0.5s ease 0.6s;
+}
+
 /* Ya presionado: verde, quieto y sin click. */
 .presionable[data-presionado="true"] {
   pointer-events: none;
@@ -478,16 +495,74 @@ button {
   cursor: grabbing;
 }
 
+/* Cable del disco duro: el lienzo ocupa todo el marco y tiene la misma
+   resolución que el arte (521x260), escalado SIN suavizar. No recibe clicks
+   (el cable se agarra con ".conexion"). Cuando se conecta, "Fondo superior -
+   Nivel 5" (que ya trae el mismo cable dibujado) hace fade-in y el cable
+   dibujado se desvanece después, para que quede exactamente el arte final. */
+.cable-lienzo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 1;
+  transition: opacity 0.4s ease 0.9s;
+}
+
+.fondo-marco.disco-conectado .cable-lienzo {
+  opacity: 0;
+}
+
+/* Zona donde se agarra el extremo del cable: invisible (el cable y sus auras
+   se dibujan en el lienzo) y solo recibe el mouse cuando se puede agarrar. */
+.conexion {
+  opacity: 1;
+  pointer-events: none;
+  cursor: grab;
+  touch-action: none;
+  z-index: 6;
+}
+
+.conexion.conexion--activo {
+  pointer-events: auto;
+}
+
+.conexion:active {
+  cursor: grabbing;
+}
+
+.conexion:focus-visible {
+  outline: 2px solid #ffd23f;
+  outline-offset: 1px;
+}
+
 /* Rack de disco: capa idéntica al rack del fondo, puesta SIEMPRE por encima
-   del disco. Solo cuenta la parte a la derecha de la bahía (--clip-x = x donde
-   empieza la chapa del rack, en px del arte): el disco entra justo en la bahía
-   (60 px de ancho, igual que ella), así que al deslizarlo hacia la derecha su
-   extremo se mete DEBAJO del borde del rack, como la lengüeta que retiene un
-   disco en su jaula. Sin deslizar no se nota nada: es idéntica al fondo. */
+   del disco. El disco arranca a la izquierda del rack y se desliza hacia la
+   derecha: al entrar queda tapado por la chapa del rack (x 318 en adelante)
+   y solo asoma un poquito por el borde izquierdo. Sin deslizar no se nota
+   nada: es idéntica al fondo.
+   --clip-x / --clip-fin: qué franja de la capa se muestra (px del arte). El
+   borde oscuro del rack (x 317) es parte del FONDO, no del sprite del rack,
+   así que lo redibuja una segunda capa de 1 px (".rack-superior--borde")
+   tomada del fondo.
+   Arrancan ocultas y aparecen con el MISMO fade (1 s) que "Fondo superior",
+   o sea recién cuando actúa secuencia_fondo_nivel_3.js (clase "nivel-listo"):
+   antes se vería sobre el "Fondo inclinado" de la introducción. */
 .rack-superior {
   z-index: 3;
+  opacity: 0;
   pointer-events: none;
-  clip-path: inset(0 0 0 calc(var(--clip-x, 0) * 100% / 521));
+  clip-path: inset(
+    0 calc((521 - var(--clip-fin, 521)) * 100% / 521) 0 calc(var(--clip-x, 0) * 100% / 521)
+  );
+  transition: opacity 1s ease;
+}
+
+.fondo-marco.nivel-listo .rack-superior {
+  opacity: 1;
 }
 
 /* Guías (auras y flechas): cada una trae 2 cuadros (data-frame 1 y 2) que se
@@ -497,6 +572,8 @@ button {
   z-index: 3;
   opacity: 0;
   pointer-events: none;
+  /* --dx: cuánto se corre la guía en horizontal (px del arte), como las demás capas. */
+  transform: translateX(calc(var(--dx, 0) * 100% / 521));
 }
 
 .guia.guia--activa[data-frame="1"] {
