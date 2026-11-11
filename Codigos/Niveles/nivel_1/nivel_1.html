@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Nivel - 1</title>
+  <link rel="stylesheet" href="nivel_1.css" />
+</head>
+<body>
+
+  <!-- ===================================================================== -->
+  <!-- INTRODUCCIÓN                                                          -->
+  <!-- ===================================================================== -->
+  <div id="pantalla-intro" class="intro-overlay">
+    <div class="intro-contenido">
+      <img src="../../../Recursos_Gráficos/Sprites/Motherboard/Motherboard_Frente.png" alt="Placa Madre" class="icono-intro" />
+      <h1>La Placa Madre</h1>
+      <p>
+        Es la base de la computadora. Conecta y permite la comunicación entre todos los componentes, como el CPU, la RAM y el almacenamiento.
+      </p>
+      <p class="instruccion-click">Haz clic en cualquier parte para empezar</p>
+    </div>
+  </div>
+
+  <section class="pantalla-niveles">
+    
+    <!-- Botón para saltar la animación de fondos -->
+    <button id="btn-skip" class="btn-skip oculto">Saltar Animación ⏭</button>
+
+    <div class="fondo-marco">
+      <img
+        src="../../../Recursos_Gráficos/Sprites/Motherboard/Fondo inclinado - Nivel 1.png"
+        alt=""
+        class="fondo-capa fondo-inclinado"
+        aria-hidden="true"
+      />
+      <img
+        src="../../../Recursos_Gráficos/Sprites/Motherboard/Fondo superior - Nivel 1.png"
+        alt="Vista cercana de la bandeja de montaje de la placa madre, todavía vacía"
+        class="fondo-capa fondo-superior"
+      />
+      <img
+        src="../../../Recursos_Gráficos/Sprites/CPU/Fondo superior - Nivel 2.png"
+        alt="Placa madre ya colocada y encarada hacia la placa de puertos del gabinete"
+        class="fondo-capa fondo-superior-n2"
+      />
+
+      <div class="zona-placa-madre">
+        <span class="zona-placa-madre__etiqueta">Zona de la placa madre</span>
+        <button type="button" class="punto-tornillo punto-tornillo--1" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 1"></button>
+        <button type="button" class="punto-tornillo punto-tornillo--2" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 2"></button>
+        <button type="button" class="punto-tornillo punto-tornillo--3" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 3"></button>
+        <button type="button" class="punto-tornillo punto-tornillo--4" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 4"></button>
+        <button type="button" class="punto-tornillo punto-tornillo--5" data-colocado="false" data-apretado="false" aria-label="Punto de fijación 5"></button>
+      </div>
+    </div>
+
+    <aside class="panel-misiones" aria-label="Misiones del nivel">
+      <h2 class="panel-misiones__titulo">Misiones</h2>
+      <ol class="panel-misiones__lista">
+        <li class="mision" data-mision="colocar-placa">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Colocar la placa madre</span>
+        </li>
+        <li class="mision oculta" data-mision="colocar-tornillos">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Colocar los 5 tornillos</span>
+        </li>
+        <li class="mision oculta" data-mision="ajustar-tornillos">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Ajustar los tornillos</span>
+        </li>
+      </ol>
+    </aside>
+
+    <div class="barra-herramientas" role="toolbar" aria-label="Herramientas del nivel">
+      <button type="button" class="barra-herramientas__item" data-herramienta="placa-madre" data-uso="unico">
+        <img src="../../../Recursos_Gráficos/Sprites/Motherboard/Motherboard_Frente.png" alt="Placa madre" />
+      </button>
+      <button type="button" class="barra-herramientas__item" data-herramienta="destornillador" data-uso="ilimitado">
+        <img src="../../../Recursos_Gráficos/Sprites/herramientas/Destornillador.png" alt="Destornillador" />
+      </button>
+      <button type="button" class="barra-herramientas__item" data-herramienta="tornillo" data-usos-restantes="5">
+        <img src="../../../Recursos_Gráficos/Sprites/herramientas/tornillo.png" alt="Tornillo" />
+        <span class="barra-herramientas__contador">5</span>
+      </button>
+      <div class="barra-herramientas__item"></div>
+      <div class="barra-herramientas__item"></div>
+    </div>
+
+    <div class="barra-lateral">
+      <button type="button" class="boton-salir" aria-label="Salir"></button>
+      <div class="barra-progreso" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Progreso del nivel">
+        <div class="barra-progreso__relleno" style="--progreso: 0%"></div>
+      </div>
+    </div>
+
+    <div class="overlay-confirmacion" aria-hidden="true">
+      <div class="dialogo-confirmacion" role="alertdialog" aria-modal="true" aria-labelledby="dialogo-confirmacion-texto">
+        <p id="dialogo-confirmacion-texto" class="dialogo-confirmacion__texto">¿Estas seguro de salir?</p>
+        <div class="dialogo-confirmacion__opciones">
+          <button type="button" class="dialogo-confirmacion__si">Si</button>
+          <button type="button" class="dialogo-confirmacion__no">No</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="JS/secuencia_fondo_nivel_1.js"></script>
+  <script src="JS/herramientas_nivel_1.js"></script>
+  <script src="JS/misiones_nivel_1.js"></script>
+  <script src="JS/nivel_1.js"></script>
+  <script src="JS/puntaje_nivel_1.js"></script>
+</body>
+</html>
