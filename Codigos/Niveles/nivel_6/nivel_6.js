@@ -200,6 +200,16 @@
 
   // 1. Iniciar juego al hacer clic en la intro
   pantallaIntro.addEventListener("click", () => {
+
+        // Iniciar el tutorial
+    window.iniciarTutorial([
+      {
+        selector: '.contenedor-superior',
+        titulo: 'Copia el código',
+        texto: 'El CPU envía datos. Lee el código binario de arriba y réplicalo abajo usando las teclas 0 y 1. ¡Cada error resta puntos!'
+      }
+    ], 'tutorial_nivel_6_visto');
+
     pantallaIntro.classList.add("oculto");
     juegoPrincipal.classList.remove("oculto");
     

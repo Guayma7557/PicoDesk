@@ -24,6 +24,25 @@
     btnSkip.classList.remove("oculto");
 
     timeoutFondo = setTimeout(avanzarFondo, 3000);
+
+        // Iniciar el tutorial
+    window.iniciarTutorial([
+      {
+        selector: '.panel-misiones',
+        titulo: 'Sigue las misiones',
+        texto: 'Arriba a la derecha verás los pasos a seguir. ¡Completalos todos para armar la computadora!'
+      },
+      {
+        selector: '.barra-herramientas',
+        titulo: 'Arrastra y suelta',
+        texto: 'Haz clic sostenido sobre la placa madre y los tornillos para arrastrarlos a su lugar.'
+      },
+      {
+        selector: '.barra-herramientas__item[data-herramienta="destornillador"]',
+        titulo: 'Usa el destornillador',
+        texto: 'Selecciona el destornillador haciendo clic, y luego haz clic sobre cada tornillo para ajustarlo.'
+      }
+    ], 'tutorial_nivel_1_visto');
   });
 
   // Botón para saltar la animación

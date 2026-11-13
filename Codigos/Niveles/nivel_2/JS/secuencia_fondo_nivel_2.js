@@ -23,6 +23,15 @@
     introOverlay.classList.add("oculto");
     btnSkip.classList.remove("oculto");
     timeoutFondo = setTimeout(avanzarFondo, 3000);
+
+        // Iniciar el tutorial
+    window.iniciarTutorial([
+      {
+        selector: '.barra-herramientas',
+        titulo: 'Instala el CPU y la RAM',
+        texto: 'Arrastra el CPU y las dos memorias RAM desde la barra inferior hacia sus ranuras correspondientes en la placa madre.'
+      }
+    ], 'tutorial_nivel_2_visto');
   });
 
   btnSkip.addEventListener("click", avanzarFondo);

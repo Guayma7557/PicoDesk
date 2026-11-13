@@ -23,6 +23,16 @@
     btnSkip.classList.remove("oculto");
 
     timeoutFondo = setTimeout(avanzarFondo, 3000);
+
+    // Iniciar el tutorial
+    window.iniciarTutorial([
+      {
+        selector: '.barra-herramientas',
+        titulo: 'Arma y conecta todo',
+        texto: 'Arrastra las GPUs, haz clic para encajarlas. Luego arrastra el disco duro, deslízalo bajo el rack y finalmente conecta su cable arrastrándolo hacia la placa madre.'
+      }
+    ], 'tutorial_nivel_3_visto');
+
   });
 
   // Botón para saltar la animación

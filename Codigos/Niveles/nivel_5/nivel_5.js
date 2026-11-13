@@ -56,6 +56,26 @@
     tiempoInicio = Date.now();
     etapaActual = 2;
 
+        // Iniciar el tutorial
+    window.iniciarTutorial([
+      {
+        selector: '#lienzo-carriles',
+        titulo: 'Sigue los caminos',
+        texto: 'Mantén presionado el clic izquierdo y sigue las líneas negras desde el conector hacia los componentes. ¡No te salgas del carril!',
+        accionEspecial: () => {
+          // Hace que el lienzo brille para indicar dónde está el minijuego
+          document.getElementById('lienzo-carriles').classList.add('carril-glow');
+          // Quitar el brillo cuando el tutorial termine
+          const btnTerminar = document.getElementById('tourSiguiente');
+          if (btnTerminar.textContent === '¡Entendido!') {
+             btnTerminar.addEventListener('click', () => {
+               document.getElementById('lienzo-carriles').classList.remove('carril-glow');
+             }, { once: true });
+          }
+        }
+      }
+    ], 'tutorial_nivel_5_visto');
+
     // Mostramos el botón de saltar
     btnSkip.classList.remove("oculto");
 
