@@ -1,0 +1,133 @@
+/* ==========================================================================
+   tutorial.css
+   Estilos para el tutorial paso a paso de los niveles.
+   ========================================================================== */
+
+.tour-bloqueo {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  cursor: default;
+}
+
+.tour-foco {
+  position: fixed;
+  z-index: 9991;
+  border-radius: 8px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6), 0 0 15px 5px rgba(224, 178, 61, 0.8);
+  border: 2px solid #ffd23f;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.tour-tarjeta {
+  position: fixed;
+  z-index: 9992;
+  width: min(320px, 85vw);
+  background-color: #303030;
+  border: 2px solid #477F90;
+  border-radius: 8px;
+  padding: 1.2rem;
+  color: #E8E7E4;
+  font-family: 'DotGothic16', sans-serif;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+}
+
+.tour-tarjeta h2 {
+  font-family: 'VT323', monospace;
+  font-size: 2rem;
+  margin: 0 0 0.5rem 0;
+  color: #ffd23f;
+}
+
+.tour-tarjeta p {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+}
+
+.tour-puntos {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.tour-punto {
+  font-size: 1rem;
+  color: #7a7a7a;
+}
+.tour-punto.activo {
+  color: #ffd23f;
+}
+
+.tour-botones {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tour-omitir {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-family: 'DotGothic16', sans-serif;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.9rem;
+}
+.tour-omitir:hover { color: #fff; }
+
+.tour-siguiente {
+  background-color: #477F90;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-family: 'DotGothic16', sans-serif;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+.tour-siguiente:hover { background-color: #356673; }
+
+.tour-tecla {
+  display: none; /* Oculto por defecto, se puede mostrar si quieres */
+}
+
+/* Flechita del tooltip */
+.tour-tarjeta::after {
+  content: "";
+  position: absolute;
+  border: 10px solid transparent;
+}
+
+/* Posiciones de la flechita según dónde esté la tarjeta */
+.tour-tarjeta[data-lado="derecha"]::after {
+  border-right-color: #477F90;
+  left: -20px;
+  top: var(--TourFlecha, 20px);
+}
+.tour-tarjeta[data-lado="izquierda"]::after {
+  border-left-color: #477F90;
+  right: -20px;
+  top: var(--TourFlecha, 20px);
+}
+.tour-tarjeta[data-lado="abajo"]::after {
+  border-bottom-color: #477F90;
+  top: -20px;
+  left: var(--TourFlecha, 20px);
+}
+.tour-tarjeta[data-lado="arriba"]::after {
+  border-top-color: #477F90;
+  bottom: -20px;
+  left: var(--TourFlecha, 20px);
+}
+
+/* Efecto especial para nivel 5 (brillo en los carriles) */
+.carril-glow {
+  box-shadow: inset 0 0 50px rgba(0, 255, 0, 0.4);
+  border-radius: 10px;
+}
