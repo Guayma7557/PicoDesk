@@ -1,0 +1,990 @@
+/* ==========================================================================
+   variables.css
+   Tokens de diseño: colores, tipografía y espaciados reutilizados
+   por el resto de los módulos.
+   ========================================================================== */
+
+:root {
+  /* Colores base */
+  --color-fondo: #7b3bbb;
+  --color-boton: #a44545;
+  --color-boton-hover: #b85454;
+
+  /* Barra de progreso */
+  --color-progreso-vacio: #3a3a3a;
+  --color-progreso-relleno: #e0b23d;
+
+  /* Tipografía pixel */
+  --fuente-pixel: "VT323", "DotGothic16", monospace;
+
+  /* Espaciados generales */
+  --espacio-borde: clamp(1rem, 2vw, 2.5rem);
+  --espacio-entre-controles: clamp(0.8rem, 1.5vh, 1.75rem);
+
+  /* Tamaño del botón triangular */
+  --ancho-boton-salir: clamp(1.75rem, 2.2vw, 3.25rem);
+  --alto-boton-salir: clamp(2.25rem, 2.9vw, 4.25rem);
+
+  /* Barra de progreso */
+  --ancho-barra-progreso: clamp(0.6rem, 1vw, 1rem);
+  --alto-barra-progreso: clamp(12rem, 55vh, 26rem);
+}
+/* ==========================================================================
+   base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  font-family: var(--fuente-pixel);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   layout
+   ========================================================================== */
+
+.pantalla-niveles {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--color-fondo);
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   boton de salida
+   ========================================================================== */
+
+.boton-salir {
+  flex-shrink: 0;
+  width: var(--ancho-boton-salir);
+  height: var(--alto-boton-salir);
+  border: none;
+  padding: 0;
+  background-color: var(--color-boton);
+
+  /* Triángulo */
+
+  clip-path: polygon(100% 0%, 100% 100%, 0% 50%);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.boton-salir:hover {
+  background-color: var(--color-boton-hover);
+}
+
+.boton-salir:active {
+  transform: scale(0.94);
+}
+
+.boton-salir:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 4px;
+}
+
+/* ==========================================================================
+   barra-lateral
+   ========================================================================== */
+
+.barra-lateral {
+  position: absolute;
+  top: var(--espacio-borde);
+  left: var(--espacio-borde);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-entre-controles);
+}
+
+/* Barra de progreso */
+.barra-progreso {
+  position: relative;
+  width: var(--ancho-barra-progreso);
+  height: var(--alto-barra-progreso);
+  background-color: var(--color-progreso-vacio);
+  clip-path: polygon(0% 0%, 100% 3%, 100% 100%, 0% 96%);
+  overflow: hidden;
+}
+
+.barra-progreso__relleno {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--progreso, 0%);
+  background-color: var(--color-progreso-relleno);
+}
+/* ==========================================================================
+   dialogo-confirmación
+   ========================================================================== */
+
+.overlay-confirmacion {
+  position: fixed;
+  inset: 0;
+  display: none; /* se activa agregando la clase ".is-visible" vía JS */
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.overlay-confirmacion.is-visible {
+  display: flex;
+}
+
+.dialogo-confirmacion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.25rem, 3vh, 2rem);
+  max-width: min(90vw, 28rem);
+  padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 3rem);
+  background-color: #1a1a1a;
+  border: 2px solid var(--color-boton);
+  text-align: center;
+}
+
+.dialogo-confirmacion__texto {
+  margin: 0;
+  color: #ffffff;
+  font-family: var(--fuente-pixel);
+  font-size: clamp(0.8rem, 1.4vw, 1.05rem);
+  line-height: 1.7;
+}
+
+.dialogo-confirmacion__opciones {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+/* Botón "No": rojo, con forma de botón -> es la opción visualmente fuerte */
+.dialogo-confirmacion__no {
+  border: none;
+  padding: 0.65rem 1.6rem;
+  background-color: var(--color-boton);
+  color: #ffffff;
+  font-family: var(--fuente-pixel);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.dialogo-confirmacion__no:hover {
+  background-color: var(--color-boton-hover);
+}
+
+.dialogo-confirmacion__no:active {
+  transform: scale(0.96);
+}
+
+.dialogo-confirmacion__no:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+/* Opción "Sí": texto plano, sin fondo ni borde, deliberadamente discreto */
+.dialogo-confirmacion__si {
+  background: none;
+  border: none;
+  padding: 0.4rem;
+  color: #7a7a7a;
+  font-family: var(--fuente-pixel);
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.dialogo-confirmacion__si:hover,
+.dialogo-confirmacion__si:focus-visible {
+  color: #b0b0b0;
+  text-decoration: underline;
+}
+
+.dialogo-confirmacion__si:focus-visible {
+  outline: none;
+}
+
+/* Botón triangular deshabilitado mientras el diálogo está abierto */
+.boton-salir:disabled {
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   fondo del nivel (secuencia "Fondo inclinado" -> "Fondo superior")
+   ========================================================================== */
+
+/* Marco a pantalla completa que respeta la proporción real de las imágenes
+   de fondo (521x260). Se ajusta al ancho o al alto de la ventana, lo que
+   toque primero, y queda centrado: así "Fondo superior" siempre se ve
+   completo y la zona interactiva (posicionada en % dentro de este marco)
+   calza con el dibujo sin importar el tamaño de pantalla. */
+.fondo-marco {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  max-width: calc(100vh * (521 / 260));
+  max-height: calc(100vw * (260 / 521));
+  aspect-ratio: 521 / 260;
+  z-index: 1;
+}
+
+.fondo-capa {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* "Fondo inclinado - Nivel 4": se muestra arriba de todo al entrar al
+   nivel y se desvanece a los 3s (ver secuencia_fondo_nivel_3.js). Se
+   estira un poco horizontalmente (es puramente decorativa, no tiene
+   ninguna zona interactiva encima) para que no queden franjas del fondo
+   del nivel asomando a los costados. */
+.fondo-inclinado {
+  z-index: 2;
+  opacity: 1;
+  transform: scaleX(1.06);
+  transition: opacity 1s ease;
+}
+
+.fondo-marco.nivel-listo .fondo-inclinado {
+  opacity: 0;
+}
+
+/* "Fondo superior - Nivel 4": arranca oculta y hace fade-in al mismo
+   tiempo que "Fondo inclinado" hace fade-out (cross-fade), quedando
+   como fondo fijo del nivel una vez terminada la transición. */
+.fondo-superior {
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.fondo-marco.nivel-listo .fondo-superior {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   COMPONENTES (etapas)
+   Hoy: GPU. El segundo componente se agrega con el mismo esquema, sin
+   tocar este bloque (solo las medidas inline "--x --y --w --h" del HTML).
+   Todas las medidas están en píxeles del arte (lienzo de 521x260) y acá se
+   convierten a % del marco, así que escalan con cualquier pantalla.
+   ========================================================================== */
+
+/* Desfase (en px del arte) del arte de la carpeta "gpu" respecto de los
+   fondos "Nivel 3/4": "Fondo superior - GPU" y "gpu arrastrando" están
+   dibujados 1 px más a la derecha. Se corrige acá (-1) para que al hacer el
+   cross-fade la imagen no pegue un saltito y las GPU calcen con las ranuras.
+   Si se vuelve a exportar ese arte ya alineado, poner 0. */
+.fondo-marco {
+  --desfase-gpu-x: -1;
+}
+
+/* Capas que se corren en horizontal: --dx es el corrimiento propio de cada
+   una (ej. la GPU de la ranura 2 va 22 px a la derecha), --desfase-x la
+   corrección de arriba y --slide lo que se deslizó la pieza (fase "deslizar").
+   --escala achica la capa desde su centro (--cx --cy, en px del arte): es el
+   efecto de profundidad al presionar. El % de translateX es sobre el ancho
+   de la propia capa, que ocupa todo el marco. */
+.fondo-etapa,
+.instalado {
+  transform: translateX(calc((var(--dx, 0) + var(--desfase-x, 0) + var(--slide, 0)) * 100% / 521))
+    scale(var(--escala, 1));
+  transform-origin: calc(var(--cx, 0) * 100% / 521) calc(var(--cy, 0) * 100% / 260);
+}
+
+.fondo-etapa--gpu,
+.fondo-etapa--final,
+.instalado[data-componente="gpu"] {
+  --desfase-x: var(--desfase-gpu-x);
+}
+
+/* "Fondo superior - GPU": las dos GPU ya instaladas. Arranca oculta y hace
+   fade-in ENCIMA de "Fondo superior - Nivel 4" (que no se apaga, así no hay
+   un momento en que se vea a través) apenas se colocan todas las GPU. */
+.fondo-etapa {
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.fondo-marco.gpu-listo .fondo-etapa--gpu {
+  opacity: 1;
+}
+
+/* "Fondo superior - Nivel 5": el estado final del nivel (GPU instaladas, disco
+   duro asomando bajo el rack y su cable rojo conectado). Está dibujado en la
+   misma grilla corrida que el arte de la GPU, de ahí el mismo desfase. Hace
+   fade-in cuando se conecta el cable. */
+.fondo-marco.disco-conectado .fondo-etapa--final {
+  opacity: 1;
+}
+
+/* Sprite del componente ya colocado ("gpu arrastrando"): oculto hasta que
+   se coloca en esa ranura. */
+.instalado {
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.instalado.instalado--visible {
+  opacity: 1;
+}
+
+/* Componente presionado: se achica un poco desde su centro, como si se
+   hundiera (profundidad). Solo el disco define --escala-presionado; los
+   demás componentes (la GPU) no cambian de tamaño. */
+.instalado.instalado--presionado {
+  --escala: var(--escala-presionado, 1);
+}
+
+.instalado[data-componente="disco"] {
+  --escala-presionado: 0.92;
+}
+
+/* Mientras se desliza con el puntero, sigue al instante (sin animación). */
+.instalado.instalado--arrastrando {
+  transition: opacity 0.25s ease;
+}
+
+/* Geometría genérica de ranuras y zonas a presionar: --x --y --w --h inline. */
+.socket,
+.presionable,
+.deslizable,
+.conexion {
+  position: absolute;
+  left: calc(var(--x) * 100% / 521);
+  top: calc(var(--y) * 100% / 260);
+  width: calc(var(--w) * 100% / 521);
+  height: calc(var(--h) * 100% / 260);
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+}
+
+/* Ranura: el lugar que ocupa cada componente. Usa "outline" (no "border")
+   para no alterar su tamaño. Invisible hasta que su etapa está desbloqueada
+   y terminó la introducción; ahí aparece con el marco rojo como destino. */
+.socket {
+  outline: 2px solid #e02424;
+  outline-offset: 1px;
+  opacity: 0;
+  pointer-events: none; /* se activa con .socket--activo */
+  cursor: pointer;
+  z-index: 4;
+  transition: opacity 0.8s ease, background-color 0.15s ease;
+}
+
+.fondo-marco.nivel-listo .socket.socket--visible {
+  opacity: 1;
+}
+
+/* Ranura ocupada: ya no hace falta el marco rojo (se ve el componente puesto). */
+.socket[data-ocupado="true"] {
+  outline-color: transparent;
+}
+
+/* Con una herramienta seleccionada (click) o mientras se arrastra una por
+   encima, las ranuras libres aceptan click/soltar y se resaltan en amarillo. */
+.socket.socket--activo,
+.socket.socket--resaltado {
+  outline-color: #ffd23f;
+  background-color: rgba(255, 210, 63, 0.35);
+}
+
+.socket.socket--activo {
+  pointer-events: auto;
+}
+
+/* Zonas a presionar (en la GPU, la tarjeta entera). Cubren exactamente la
+   misma área que la ranura del componente. Quedan inactivas hasta que están
+   todos los componentes de su etapa colocados. */
+.presionable {
+  outline: 2px solid transparent;
+  outline-offset: 1px;
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+  z-index: 5;
+  transition: opacity 0.4s ease, background-color 0.15s ease;
+}
+
+.presionable.presionable--activo {
+  opacity: 1;
+  pointer-events: auto;
+  outline-color: #ffd23f;
+  box-shadow: 0 0 8px 2px rgba(255, 210, 63, 0.7);
+  animation: pulso-socket 1.4s ease-in-out infinite;
+}
+
+.presionable.presionable--activo:hover,
+.presionable.presionable--activo:focus-visible {
+  background-color: rgba(255, 210, 63, 0.3);
+}
+
+.presionable.presionable--activo:active {
+  background-color: rgba(255, 210, 63, 0.5);
+}
+
+/* Etapa terminada: la marca verde se desvanece (con un pequeño retraso para
+   que se vea la confirmación del último click). */
+.presionable.presionable--terminado {
+  opacity: 0;
+  transition: opacity 0.5s ease 0.6s;
+}
+
+/* Ya presionado: verde, quieto y sin click. */
+.presionable[data-presionado="true"] {
+  pointer-events: none;
+  outline-color: #3fd16a;
+  background-color: rgba(63, 209, 106, 0.28);
+  box-shadow: 0 0 6px 1px rgba(63, 209, 106, 0.7);
+  animation: none;
+}
+
+/* Zona de agarre para deslizar (fase "deslizar"): misma área que la pieza y
+   se mueve con ella (--slide, en px del arte). Inactiva hasta que se
+   presionaron todas las piezas del componente. */
+.deslizable {
+  left: calc((var(--x) + var(--slide, 0)) * 100% / 521);
+  opacity: 1;
+  pointer-events: none;
+  cursor: grab;
+  touch-action: none;
+  z-index: 5;
+}
+
+.deslizable.deslizable--activo {
+  pointer-events: auto;
+}
+
+/* Sin tinte al pasar el mouse: el aura y la flecha ya son la guía y un tinte
+   taparía el sprite. Con el teclado sí se marca el foco. */
+.deslizable.deslizable--activo:focus-visible {
+  outline: 2px solid #ffd23f;
+  outline-offset: 1px;
+}
+
+.deslizable.deslizable--activo:active {
+  cursor: grabbing;
+}
+
+/* Cable del disco duro: el lienzo ocupa todo el marco y tiene la misma
+   resolución que el arte (521x260), escalado SIN suavizar. No recibe clicks
+   (el cable se agarra con ".conexion"). Cuando se conecta, "Fondo superior -
+   Nivel 5" (que ya trae el mismo cable dibujado) hace fade-in y el cable
+   dibujado se desvanece después, para que quede exactamente el arte final. */
+.cable-lienzo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 1;
+  transition: opacity 0.4s ease 0.9s;
+}
+
+.fondo-marco.disco-conectado .cable-lienzo {
+  opacity: 0;
+}
+
+/* Zona donde se agarra el extremo del cable: invisible (el cable y sus auras
+   se dibujan en el lienzo) y solo recibe el mouse cuando se puede agarrar. */
+.conexion {
+  opacity: 1;
+  pointer-events: none;
+  cursor: grab;
+  touch-action: none;
+  z-index: 6;
+}
+
+.conexion.conexion--activo {
+  pointer-events: auto;
+}
+
+.conexion:active {
+  cursor: grabbing;
+}
+
+.conexion:focus-visible {
+  outline: 2px solid #ffd23f;
+  outline-offset: 1px;
+}
+
+/* Rack de disco: capa idéntica al rack del fondo, puesta SIEMPRE por encima
+   del disco. El disco arranca a la izquierda del rack y se desliza hacia la
+   derecha: al entrar queda tapado por la chapa del rack (x 318 en adelante)
+   y solo asoma un poquito por el borde izquierdo. Sin deslizar no se nota
+   nada: es idéntica al fondo.
+   --clip-x / --clip-fin: qué franja de la capa se muestra (px del arte). El
+   borde oscuro del rack (x 317) es parte del FONDO, no del sprite del rack,
+   así que lo redibuja una segunda capa de 1 px (".rack-superior--borde")
+   tomada del fondo.
+   Arrancan ocultas y aparecen con el MISMO fade (1 s) que "Fondo superior",
+   o sea recién cuando actúa secuencia_fondo_nivel_3.js (clase "nivel-listo"):
+   antes se vería sobre el "Fondo inclinado" de la introducción. */
+.rack-superior {
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  clip-path: inset(
+    0 calc((521 - var(--clip-fin, 521)) * 100% / 521) 0 calc(var(--clip-x, 0) * 100% / 521)
+  );
+  transition: opacity 1s ease;
+}
+
+.fondo-marco.nivel-listo .rack-superior {
+  opacity: 1;
+}
+
+/* Guías (auras y flechas): cada una trae 2 cuadros (data-frame 1 y 2) que se
+   alternan para que parpadeen. Solo se ven en las fases que declaran en
+   data-fases (el JS les pone .guia--activa). */
+.guia {
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  /* --dx: cuánto se corre la guía en horizontal (px del arte), como las demás capas. */
+  transform: translateX(calc(var(--dx, 0) * 100% / 521));
+}
+
+.guia.guia--activa[data-frame="1"] {
+  animation: guia-cuadro-1 0.8s infinite;
+}
+
+.guia.guia--activa[data-frame="2"] {
+  animation: guia-cuadro-2 0.8s infinite;
+}
+
+@keyframes guia-cuadro-1 {
+  0%, 49.9% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes guia-cuadro-2 {
+  0%, 49.9% { opacity: 0; }
+  50%, 100% { opacity: 1; }
+}
+
+/* La flecha hacia la derecha es la flecha hacia abajo del arte girada -90°
+   (en sentido antihorario) y movida (--tx, --ty en px del arte) a la
+   izquierda de la pieza. Gira sobre su propio centro (--cx --cy). */
+.guia--flecha-der {
+  transform: translate(calc(var(--tx) * 100% / 521), calc(var(--ty) * 100% / 260)) rotate(-90deg);
+  transform-origin: calc(var(--cx) * 100% / 521) calc(var(--cy) * 100% / 260);
+}
+
+/* Elementos cuya guía visual es un aura del arte (ej. la bahía del disco):
+   sin el marco/halo CSS que usan los demás. */
+.socket[data-sin-halo],
+.presionable[data-sin-halo] {
+  outline: none !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
+/* Tampoco llevan el tinte al pasar el mouse ni al presionar (taparía el
+   sprite); con el teclado sí se marca el foco. */
+.presionable[data-sin-halo] {
+  background-color: transparent !important;
+}
+
+.presionable[data-sin-halo]:focus-visible {
+  outline: 2px solid #ffd23f !important;
+}
+
+@keyframes pulso-socket {
+  0%, 100% { box-shadow: 0 0 6px 1px rgba(255, 210, 63, 0.5); }
+  50% { box-shadow: 0 0 12px 4px rgba(255, 210, 63, 0.9); }
+}
+
+/* barra de herramientas */
+
+.barra-herramientas {
+  position: absolute;
+  bottom: var(--espacio-borde);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  gap: clamp(0.6rem, 1.2vw, 1rem);
+  padding: clamp(0.6rem, 1.2vw, 1rem);
+  background-color: rgba(0, 0, 0, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.barra-herramientas__item {
+  position: relative;
+  width: clamp(2.75rem, 4vw, 3.5rem);
+  height: clamp(2.75rem, 4vw, 3.5rem);
+  background-color: #2a2a2a;
+  border: 2px dashed #666666;
+  border-radius: 6px;
+  padding: 0;
+
+  /* NUEVO: ahora los casilleros con herramienta son <button>, así que
+     centramos el ícono adentro (mismo arreglo de la vez pasada). */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* NUEVO: cualquier imagen dentro de un casillero se ajusta sin deformarse */
+.barra-herramientas__item img {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* NUEVO: casillero vacío (los <div> sin herramienta todavía) */
+div.barra-herramientas__item {
+  cursor: default;
+}
+
+/* NUEVO: herramienta seleccionada actualmente (referencia visual opcional
+   en la propia barra, además del cambio de cursor sobre el gabinete) */
+.barra-herramientas__item[aria-pressed="true"] {
+  border-color: #e0b23d;
+  border-style: solid;
+}
+
+/* NUEVO: herramienta ya gastada (ya colocada) o todavía bloqueada (las de
+   una etapa no se pueden usar hasta completar la etapa anterior). */
+.barra-herramientas__item[data-agotado="true"],
+.barra-herramientas__item[data-bloqueado="true"] {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Casilleros reservados para las herramientas del componente 2: vacíos. */
+.barra-herramientas__item[data-reservado] {
+  cursor: default;
+}
+
+/* Los íconos de las herramientas vienen en un lienzo de 521x260 (ej.
+   "gpu icono.png": dibujo de 500x260 desde x 5). Este contenedor tiene la
+   proporción del dibujo y oculta el resto; la imagen se agranda y se corre
+   en % para que solo se vea esa porción, centrada en el casillero.
+   herramientas_nivel_3.js calcula esos valores midiendo la imagen real (o
+   con el "data-recorte" del HTML); estos son solo valores iniciales. */
+
+/* ==========================================================================
+   ÍCONOS DE HERRAMIENTAS (CORREGIDO)
+   ========================================================================== */
+
+.icono-herramienta {
+  position: relative;
+  flex: none;
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* CORRECCIÓN: Ahora aplica a TODAS las imágenes dentro de .icono-herramienta, 
+   no solo a las de la barra. El position: absolute es lo que evita que 
+   la imagen gigante rompa el Pop-up. */
+.icono-herramienta img {
+  position: absolute;
+  max-width: none;
+  max-height: none;
+  width: 100%;
+  height: auto;
+  left: 0;
+  top: 0;
+  image-rendering: pixelated;
+}
+
+/* Si el ícono no carga, muestra el texto de su "data-etiqueta" */
+.icono-herramienta--error img {
+  display: none;
+}
+
+.icono-herramienta--error::after {
+  content: attr(data-etiqueta);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--fuente-pixel);
+  font-size: 0.55rem;
+  color: #ffffff;
+}
+
+/* Pista visual: resalta en amarillo la herramienta que corresponde usar
+   a continuación (las que faltan colocar de la etapa en curso), para que
+   el jugador no se pierda. La actualiza herramientas_nivel_3.js. */
+.barra-herramientas__item.barra-herramientas__item--sugerido {
+  border-color: #ffd23f;
+  border-style: solid;
+  box-shadow: 0 0 0 2px rgba(255, 210, 63, 0.55), 0 0 10px 2px rgba(255, 210, 63, 0.65);
+  animation: pulso-sugerencia 1.4s ease-in-out infinite;
+}
+
+/* Las herramientas se pueden arrastrar: cursor "grab" y touch-action: none
+   para que el navegador no intente hacer scroll/zoom con el dedo mientras se
+   arrastran en pantallas táctiles. */
+.barra-herramientas__item[data-herramienta] {
+  cursor: grab;
+  touch-action: none;
+}
+
+.barra-herramientas__item[data-herramienta]:active {
+  cursor: grabbing;
+}
+
+/* Ícono "fantasma" que sigue al puntero mientras se arrastra una
+   herramienta desde la barra hasta su destino. */
+.arrastre-fantasma {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: clamp(2.25rem, 3.2vw, 2.75rem);
+  height: clamp(2.25rem, 3.2vw, 2.75rem);
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 200;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.45));
+}
+
+/* Fantasma de una herramienta con sprite (ej. la GPU): el sprite de
+   "gpu arrastrando" recortado a su dibujo. Su tamaño exacto (el mismo que la
+   ranura en pantalla) lo calcula herramientas_nivel_3.js como estilo en
+   línea. */
+.arrastre-fantasma--sprite {
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  opacity: 1;
+  /* El halo amarillo ayuda a verlo mientras se arrastra. */
+  filter: drop-shadow(0 0 2px #ffd23f) drop-shadow(0 0 5px rgba(255, 210, 63, 0.8))
+    drop-shadow(0 4px 6px rgba(0, 0, 0, 0.45));
+}
+
+/* fin de barra de herramientas */
+
+/* NUEVO: panel de misiones. Flota arriba a la derecha, por encima del
+   fondo del nivel (ya no depende de un contenedor flex junto al gabinete,
+   porque el fondo ahora ocupa toda la pantalla). */
+.panel-misiones {
+  position: absolute;
+  top: var(--espacio-borde);
+  right: var(--espacio-borde);
+  z-index: 3;
+  width: clamp(11rem, 18vw, 15rem);
+  box-sizing: border-box;
+  padding: clamp(0.75rem, 1.5vw, 1.1rem);
+  background-color: rgba(0, 0, 0, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.panel-misiones__titulo {
+  margin: 0 0 clamp(0.7rem, 1.4vw, 1rem);
+  font-family: var(--fuente-pixel);
+  font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+  color: #ffffff;
+  text-align: center;
+}
+
+.panel-misiones__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.7rem, 1.4vw, 1rem);
+}
+
+.mision {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--fuente-pixel);
+  font-size: clamp(0.55rem, 0.95vw, 0.68rem);
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+/* Misión que todavía no llegó su turno: no se muestra */
+.mision.oculta {
+  display: none;
+}
+
+/* Casillero de estado: vacío = pendiente/activa */
+.mision__marca {
+  flex-shrink: 0;
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 2px solid #e0b23d;
+  border-radius: 3px;
+  background-color: transparent;
+}
+
+/* Misión completada: texto y casillero en verde, con un tilde */
+.mision.completada {
+  color: #6fcf6f;
+}
+
+.mision.completada .mision__marca {
+  position: relative;
+  border-color: #6fcf6f;
+  background-color: #6fcf6f;
+}
+
+.mision.completada .mision__marca::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(14% 44%, 0 63%, 39% 100%, 100% 20%, 82% 4%, 37% 72%);
+  background-color: #1a1a1a;
+}
+
+
+/* ==========================================================================
+   INTRODUCCIÓN Y BOTÓN SKIP (ESTANDARIZADO)
+   ========================================================================== */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(48, 48, 48, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  cursor: pointer;
+  padding: 1rem;
+}
+.intro-contenido {
+  background-color: #404040;
+  border: 3px solid #E8E7E4;
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 600px;
+  text-align: center;
+  color: white;
+}
+.intro-iconos-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+.intro-contenido h1 {
+  font-family: 'VT323', monospace;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+.intro-contenido p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+.instruccion-click {
+  color: var(--color-progreso-relleno);
+  animation: pulso 1.5s infinite;
+}
+.btn-skip {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #E8E7E4;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--fuente-pixel);
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+.btn-skip:hover { background-color: rgba(0, 0, 0, 0.8); }
+.oculto { display: none !important; }
+
+@keyframes pulso {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.05); }
+}
+
+/* ==========================================================================
+   BARRA DE PROGRESO (UNIFICADA CON NIVEL 6)
+   ========================================================================== */
+.barra-progreso {
+  position: relative;
+  width: var(--ancho-barra-progreso);
+  height: 70vh; /* Tamaño estandarizado */
+  background-color: #404040;
+  clip-path: polygon(0% 0%, 100% 3%, 100% 100%, 0% 96%);
+  overflow: hidden;
+}
+.barra-progreso__relleno {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--progreso, 0%);
+  background-color: #E8E7E4;
+  transition: height 0.3s ease; /* Animación agregada */
+}
+
+/* ==========================================================================
+   HERRAMIENTAS (BORDE VERDE AL AGARRAR)
+   ========================================================================== */
+.barra-herramientas__item.agarrando {
+  border-color: #6fcf6f;
+  border-style: solid;
+  box-shadow: 0 0 10px rgba(111, 207, 111, 0.8);
+animation: none;
+}
+
+/* ... (El resto de tu CSS se mantiene igual) ... */
+
+/* Pulso de la herramienta sugerida (ver .barra-herramientas__item--sugerido) */
+@keyframes pulso-sugerencia {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(255, 210, 63, 0.55), 0 0 6px 1px rgba(255, 210, 63, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(255, 210, 63, 0.85), 0 0 14px 4px rgba(255, 210, 63, 0.85);
+  }
+}

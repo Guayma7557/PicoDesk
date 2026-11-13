@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Nivel - 3</title>
+  <link rel="stylesheet" href="nivel_3.css" />
+</head>
+<body>
+
+   <!-- ===================================================================== -->
+  <!-- INTRODUCCIÓN (ESTANDARIZADA Y CORREGIDA)                              -->
+  <!-- ===================================================================== -->
+  <div id="pantalla-intro" class="intro-overlay">
+    <div class="intro-contenido">
+      <!-- Flex para los 2 íconos: GPU y Disco Duro -->
+      <div class="intro-iconos-flex">
+        <!-- CORRECCIÓN: Quitamos el height: 100px. Dejamos width: 120px y height: auto -->
+        <span class="icono-herramienta" data-etiqueta="GPU" style="flex: 0 0 auto; width: 120px; height: auto;">
+          <img src="../../../Recursos_Gráficos/Sprites/gpu/gpu icono.png" alt="Tarjeta gráfica (GPU)" data-recorte="5,0,500,260" />
+        </span>
+        <!-- CORRECCIÓN: Quitamos el height: 100px -->
+        <span class="icono-herramienta" data-etiqueta="HDD" style="flex: 0 0 auto; width: 120px; height: auto;">
+          <img src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco duro icon - Nivel 4.png" alt="Disco duro" data-recorte="334,182,46,59" />
+        </span>
+      </div>
+      <h1>GPU y Disco Duro</h1>
+      <p>
+        La GPU (Tarjeta Gráfica) procesa los gráficos y las imágenes que ves en pantalla. El Disco Duro almacena todos los archivos y programas de forma permanente.
+      </p>
+      <p class="instruccion-click">Haz clic en cualquier parte para empezar</p>
+    </div>
+  </div>
+
+  <section class="pantalla-niveles">
+
+    <!-- Botón para saltar la animación de fondos -->
+    <button id="btn-skip" class="btn-skip oculto">Saltar Animación ⏭</button>
+
+    <!-- Secuencia de fondo a pantalla completa. -->
+    <div class="fondo-marco">
+      <img
+        src="../../../Recursos_Gráficos/Sprites/Disco_duro/Fondo inclinado - Nivel 4.png"
+        alt=""
+        class="fondo-capa fondo-inclinado"
+        aria-hidden="true"
+      />
+      <img
+        src="../../../Recursos_Gráficos/Sprites/Disco_duro/Fondo superior - Nivel 4.png"
+        alt="Vista cercana de la placa madre con la CPU y la RAM ya instaladas y las dos ranuras de la GPU todavía vacías"
+        class="fondo-capa fondo-superior"
+      />
+      <img
+        src="../../../Recursos_Gráficos/Sprites/gpu/Fondo superior - GPU.png"
+        alt="Las dos GPU ya instaladas en sus ranuras"
+        class="fondo-capa fondo-etapa fondo-etapa--gpu"
+      />
+      <img
+        src="../../../Recursos_Gráficos/Sprites/Fuente_de_poder/Fondo superior - Nivel 5.png"
+        alt="Las dos GPU instaladas y el disco duro conectado con su cable rojo"
+        class="fondo-capa fondo-etapa fondo-etapa--final"
+      />
+
+      <!-- COMPONENTE 1: GPU -->
+      <img
+        src="../../../Recursos_Gráficos/Sprites/gpu/gpu arrastrando.png"
+        alt=""
+        class="fondo-capa instalado"
+        data-componente="gpu"
+        data-recorte="241,14,19,98"
+        aria-hidden="true"
+      />
+      <img
+        src="../../../Recursos_Gráficos/Sprites/gpu/gpu arrastrando.png"
+        alt=""
+        class="fondo-capa instalado"
+        data-componente="gpu"
+        data-recorte="241,14,19,98"
+        style="--dx: 22"
+        aria-hidden="true"
+      />
+      <button type="button" class="socket" data-componente="gpu" data-ocupado="false" style="--x: 240; --y: 14; --w: 19; --h: 98" aria-label="Ranura de GPU 1"></button>
+      <button type="button" class="socket" data-componente="gpu" data-ocupado="false" style="--x: 262; --y: 14; --w: 19; --h: 98" aria-label="Ranura de GPU 2"></button>
+      <button type="button" class="presionable" data-componente="gpu" style="--x: 240; --y: 14; --w: 19; --h: 98" aria-label="Presionar la GPU 1"></button>
+      <button type="button" class="presionable" data-componente="gpu" style="--x: 262; --y: 14; --w: 19; --h: 98" aria-label="Presionar la GPU 2"></button>
+
+      <!-- COMPONENTE 2: DISCO DURO -->
+      <img
+        src="../../../Recursos_Gráficos/Sprites/Disco_duro/Racks de disco - Nivel 4.png"
+        alt=""
+        class="fondo-capa rack-superior"
+        data-componente="disco"
+        style="--clip-x: 318"
+        aria-hidden="true"
+      />
+      <img
+        src="../../../Recursos_Gráficos/Sprites/Disco_duro/Fondo superior - Nivel 4.png"
+        alt=""
+        class="fondo-capa rack-superior"
+        data-componente="disco"
+        style="--clip-x: 317; --clip-fin: 318"
+        aria-hidden="true"
+      />
+      <img
+        src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco duro superior - Nivel 4.png"
+        alt=""
+        class="fondo-capa instalado"
+        data-componente="disco"
+        data-recorte="326,90,60,16"
+        style="--cx: 356; --cy: 98; --dx: -73"
+        aria-hidden="true"
+      />
+      <img src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco aura 1 - Nivel 4.png" alt="" class="fondo-capa guia" data-componente="disco" data-fases="colocar presionar deslizar" data-frame="1" style="--dx: -73" aria-hidden="true" />
+      <img src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco aura 2 - Nivel 4.png" alt="" class="fondo-capa guia" data-componente="disco" data-fases="colocar presionar deslizar" data-frame="2" style="--dx: -73" aria-hidden="true" />
+      <img src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco flecha 1 - Nivel 4.png" alt="" class="fondo-capa guia" data-componente="disco" data-fases="presionar" data-frame="1" style="--dx: -73" aria-hidden="true" />
+      <img src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco flecha 2 - Nivel 4.png" alt="" class="fondo-capa guia" data-componente="disco" data-fases="presionar" data-frame="2" style="--dx: -73" aria-hidden="true" />
+      <img src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco flecha 1 - Nivel 4.png" alt="" class="fondo-capa guia guia--flecha-der" data-componente="disco" data-fases="deslizar" data-frame="1" style="--cx: 357; --cy: 81.5; --tx: -111; --ty: 16.5" aria-hidden="true" />
+      <img src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco flecha 2 - Nivel 4.png" alt="" class="fondo-capa guia guia--flecha-der" data-componente="disco" data-fases="deslizar" data-frame="2" style="--cx: 357; --cy: 81.5; --tx: -111; --ty: 16.5" aria-hidden="true" />
+      <button type="button" class="socket" data-componente="disco" data-ocupado="false" data-sin-halo style="--x: 251; --y: 88; --w: 64; --h: 20" aria-label="Posición del disco duro"></button>
+      <button type="button" class="presionable" data-componente="disco" data-sin-halo style="--x: 253; --y: 90; --w: 60; --h: 16" aria-label="Presionar el disco duro"></button>
+      <button type="button" class="deslizable" data-componente="disco" data-deslizar-max="56" style="--x: 253; --y: 90; --w: 60; --h: 16" aria-label="Deslizar el disco duro hacia la derecha"></button>
+
+      <!-- Canvas para el cable -->
+      <canvas class="cable-lienzo" data-componente="disco" width="521" height="260" aria-hidden="true"></canvas>
+      <button type="button" class="conexion" data-componente="disco" data-ancla="307.4,96.7" data-reposo="294,99" data-destino="296,38" data-radio="10" aria-label="Cable del disco duro: arrastrar hasta la placa madre"></button>
+    </div>
+
+    <aside class="panel-misiones" aria-label="Misiones del nivel">
+      <h2 class="panel-misiones__titulo">Misiones</h2>
+      <ol class="panel-misiones__lista">
+        <li class="mision" data-mision="gpu-colocar" data-componente="gpu" data-fase="colocar">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Colocar la GPU (0/2)</span>
+        </li>
+        <li class="mision oculta" data-mision="gpu-presionar" data-componente="gpu" data-fase="presionar">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Presionar la GPU (0/2)</span>
+        </li>
+        <li class="mision oculta" data-mision="disco-colocar" data-componente="disco" data-fase="colocar">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Colocar el disco duro (0/1)</span>
+        </li>
+        <li class="mision oculta" data-mision="disco-presionar" data-componente="disco" data-fase="presionar">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Presionar el disco duro (0/1)</span>
+        </li>
+        <li class="mision oculta" data-mision="disco-deslizar" data-componente="disco" data-fase="deslizar">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Deslizar el disco duro bajo el rack (0/1)</span>
+        </li>
+        <li class="mision oculta" data-mision="disco-conectar" data-componente="disco" data-fase="conectar">
+          <span class="mision__marca"></span>
+          <span class="mision__texto">Conectar el cable del disco duro (0/1)</span>
+        </li>
+      </ol>
+    </aside>
+
+    <div class="barra-herramientas" role="toolbar" aria-label="Herramientas del nivel">
+      <button type="button" class="barra-herramientas__item" data-herramienta="gpu" data-uso="unico">
+        <span class="icono-herramienta" data-etiqueta="GPU">
+          <img src="../../../Recursos_Gráficos/Sprites/gpu/gpu icono.png" alt="Tarjeta gráfica (GPU)" data-recorte="5,0,500,260" />
+        </span>
+      </button>
+      <button type="button" class="barra-herramientas__item" data-herramienta="gpu" data-uso="unico">
+        <span class="icono-herramienta" data-etiqueta="GPU">
+          <img src="../../../Recursos_Gráficos/Sprites/gpu/gpu icono.png" alt="Tarjeta gráfica (GPU)" data-recorte="5,0,500,260" />
+        </span>
+      </button>
+      <button type="button" class="barra-herramientas__item" data-herramienta="disco" data-uso="unico" data-bloqueado="true">
+        <span class="icono-herramienta" data-etiqueta="HDD">
+          <img src="../../../Recursos_Gráficos/Sprites/Disco_duro/Disco duro icon - Nivel 4.png" alt="Disco duro" data-recorte="334,182,46,59" />
+        </span>
+      </button>
+      <div class="barra-herramientas__item" data-reservado="libre"></div>
+      <div class="barra-herramientas__item" data-reservado="libre"></div>
+    </div>
+
+    <div class="barra-lateral">
+      <button type="button" class="boton-salir" aria-label="Salir"></button>
+      <div class="barra-progreso" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Progreso del nivel">
+        <div class="barra-progreso__relleno" style="--progreso: 0%"></div>
+      </div>
+    </div>
+
+    <div class="overlay-confirmacion" aria-hidden="true">
+      <div class="dialogo-confirmacion" role="alertdialog" aria-modal="true" aria-labelledby="dialogo-confirmacion-texto">
+        <p id="dialogo-confirmacion-texto" class="dialogo-confirmacion__texto">¿Estas seguro de salir?</p>
+        <div class="dialogo-confirmacion__opciones">
+          <button type="button" class="dialogo-confirmacion__si">Si</button>
+          <button type="button" class="dialogo-confirmacion__no">No</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="JS/secuencia_fondo_nivel_3.js"></script>
+  <script src="JS/herramientas_nivel_3.js"></script>
+  <script src="JS/cable_nivel_3.js"></script>
+  <script src="JS/misiones_nivel_3.js"></script>
+  <script src="JS/nivel_3.js"></script>
+  <script src="JS/puntaje_nivel_3.js"></script>
+</body>
+</html>
