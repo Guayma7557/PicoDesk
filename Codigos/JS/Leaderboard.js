@@ -1,54 +1,74 @@
 /* ==========================================================================
    leaderboard.js
-   Ordena a los participantes (mejor puntaje primero, y a igual puntaje gana
-   el menor tiempo). Rellena el podio (nombre/avatar de 1.º, 2.º y 3.º) y
-   la tabla, que lista a TODOS los participantes con su puesto, tiempo y
-   puntaje (el puntaje/tiempo ya no se repite en las tarjetas del podio).
-
-   Punto de cambio para el futuro: obtenerParticipantes() es lo único que
-   sabe de dónde vienen los datos. Hoy lee localStorage y, si no hay nada,
-   usa datos de prueba. Si más adelante hay backend, solo se cambia esa
-   función; el resto no se toca.
-
-   Forma de cada participante: { nombre, puntaje, tiempoMs }
+   Lee los registros de localStorage, los ordena y los muestra.
+   Si hay una "partidaActual" en sessionStorage (terminó el nivel 5),
+   muestra el modal para pedir las iniciales y guarda el nuevo registro.
    ========================================================================== */
 
 (function () {
-  // Ruta relativa a la ubicación de leaderboard.html (ajustar a la carpeta real).
-  const RUTA_MENU_PRINCIPAL = "../Menú_Principal/index.html";
-
+  // CORRECCIÓN: La ruta correcta al Menú Principal
+  const RUTA_MENU_PRINCIPAL = "MenúPrincipal.html";
   const CLAVE_LEADERBOARD = "leaderboardPicoDesk";
-
-  // Cantidad de puestos que van arriba en el podio (solo nombre/avatar);
-  // la tabla de abajo siempre lista a todos, podio incluido.
   const PUESTOS_EN_PODIO = 3;
 
-  const DATOS_DE_PRUEBA = [
-    { nombre: "Lucía",   puntaje: 110, tiempoMs: 95000 },
-    { nombre: "Mateo",   puntaje: 110, tiempoMs: 83000 },
-    { nombre: "Sofía",   puntaje: 100, tiempoMs: 120000 },
-    { nombre: "Tomás",   puntaje: 90,  tiempoMs: 101000 },
-    { nombre: "Valentina", puntaje: 90, tiempoMs: 134000 },
-    { nombre: "Joaquín", puntaje: 80,  tiempoMs: 142000 },
-    { nombre: "Camila",  puntaje: 70,  tiempoMs: 150000 },
-    { nombre: "Bruno",   puntaje: 60,  tiempoMs: 171000 },
-    { nombre: "Martina", puntaje: 50,  tiempoMs: 188000 },
-    { nombre: "Lautaro", puntaje: 40,  tiempoMs: 205000 },
-    { nombre: "Emma",    puntaje: 30,  tiempoMs: 233000 },
-    { nombre: "Facundo", puntaje: 20,  tiempoMs: 260000 },
-  ];
+  // ==========================================
+  // LÓGICA DEL MODAL (Guardar Partida)
+  // ==========================================
+  const modal = document.getElementById("modalNombre");
+  const inputNombre = document.getElementById("inputNombre");
+  const btnGuardar = document.getElementById("btn-guardar");
 
+  let partidaPendiente = null;
+  try {
+    const guardada = sessionStorage.getItem("partidaActual");
+    if (guardada) partidaPendiente = JSON.parse(guardada);
+  } catch (e) {}
+
+  // Si hay una partida pendiente, mostramos el modal
+  if (partidaPendiente && partidaPendiente.ultimoNivel === 5) {
+    modal.classList.add("active");
+    inputNombre.focus();
+
+    btnGuardar.addEventListener("click", () => {
+      let nombre = inputNombre.value.trim().toUpperCase();
+      if (nombre.length < 4) nombre = nombre.padEnd(4, "X"); // Rellenar con X si tiene menos de 4
+
+      // Leer historial, añadir nuevo y guardar
+      let historial = [];
+      try {
+        const guardado = localStorage.getItem(CLAVE_LEADERBOARD);
+        if (guardado) historial = JSON.parse(guardado);
+      } catch (error) {}
+
+      historial.push({
+        nombre: nombre,
+        puntaje: partidaPendiente.puntajeTotal,
+        tiempoMs: partidaPendiente.tiempoTotalMs
+      });
+
+      localStorage.setItem(CLAVE_LEADERBOARD, JSON.stringify(historial));
+
+      // Limpiar sesión y recargar
+      sessionStorage.removeItem("partidaActual");
+      sessionStorage.removeItem("resultadoNivel");
+      window.location.reload();
+    });
+  }
+
+  // ==========================================
+  // RENDERIZADO DE LA TABLA Y PODIO
+  // ==========================================
   function obtenerParticipantes() {
     try {
       const guardado = localStorage.getItem(CLAVE_LEADERBOARD);
       if (guardado) {
         const lista = JSON.parse(guardado);
-        if (Array.isArray(lista) && lista.length) return lista;
+        if (Array.isArray(lista)) return lista;
       }
     } catch (error) {
       console.error("No se pudo leer la clasificación:", error);
     }
-    return DATOS_DE_PRUEBA;
+    return []; // Retornamos vacío si no hay nada, adiós datos de prueba
   }
 
   function ordenar(lista) {
@@ -64,10 +84,6 @@
     return `${String(minutos).padStart(2, "0")}:${String(segundos).padStart(2, "0")}`;
   }
 
-  // Se usa textContent (nunca innerHTML) porque el nombre lo escribe el jugador.
-  // NUEVO: el podio ya no muestra puntaje/tiempo (ver .puesto__datos sacado
-  // del HTML/CSS) — esos números ahora viven únicamente en la tabla, donde
-  // también aparecen el 1.º, 2.º y 3.º puesto (ver rellenarTabla).
   function rellenarPuesto(numero, participante) {
     const puesto = document.querySelector(`.puesto--${numero}`);
     if (!puesto) return;
@@ -93,10 +109,6 @@
     return celda;
   }
 
-  // NUEVO: la tabla ahora muestra a TODOS los participantes (incluidos el
-  // 1.º, 2.º y 3.º, que antes solo aparecían arriba en el podio). El podio
-  // sigue mostrando nombre/avatar de los 3 primeros; el puntaje y el tiempo
-  // de todos, posición por posición, se leen acá.
   function rellenarTabla(ranking) {
     const cuerpo = document.getElementById("tabla-cuerpo");
     if (!cuerpo) return;
@@ -104,7 +116,7 @@
 
     if (!ranking.length) {
       const fila = document.createElement("tr");
-      const celda = crearCelda("Todavía no hay participantes.");
+      const celda = crearCelda("Todavía no hay partidas guardadas. ¡Sé el primero en jugar!");
       celda.colSpan = 4;
       celda.className = "vacio";
       fila.appendChild(celda);
@@ -129,6 +141,7 @@
   }
   rellenarTabla(ranking);
 
+  // Botón Volver
   const botonVolver = document.getElementById("volver");
   if (botonVolver) {
     botonVolver.addEventListener("click", () => {

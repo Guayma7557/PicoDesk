@@ -9,7 +9,6 @@
 </head>
 <body>
   <main class="pantalla">
-
     <header class="barra-superior">
       <h1 class="solo-lectores">Tabla de clasificación</h1>
       <button type="button" id="volver" class="boton-volver">
@@ -18,10 +17,7 @@
       </button>
     </header>
 
-    <!-- Podio. El HTML va en orden 1.º, 2.º, 3.º (orden de lectura);
-         el CSS los acomoda visualmente como 2.º - 1.º - 3.º. -->
     <section class="podio" aria-label="Los tres mejores puestos">
-
       <article class="puesto puesto--1">
         <h2 class="puesto__etiqueta">1er LUGAR</h2>
         <div class="puesto__tarjeta">
@@ -31,31 +27,24 @@
           </svg>
           <div class="puesto__avatar" aria-hidden="true"></div>
           <p class="puesto__nombre"></p>
-          <p class="puesto__datos"></p>
         </div>
       </article>
-
       <article class="puesto puesto--2">
         <h2 class="puesto__etiqueta">2do LUGAR</h2>
         <div class="puesto__tarjeta">
           <div class="puesto__avatar" aria-hidden="true"></div>
           <p class="puesto__nombre"></p>
-          <p class="puesto__datos"></p>
         </div>
       </article>
-
       <article class="puesto puesto--3">
         <h2 class="puesto__etiqueta">3er LUGAR</h2>
         <div class="puesto__tarjeta">
           <div class="puesto__avatar" aria-hidden="true"></div>
           <p class="puesto__nombre"></p>
-          <p class="puesto__datos"></p>
         </div>
       </article>
-
     </section>
 
-    <!-- Tabla con el resto de los participantes (del 4.º en adelante). -->
     <section class="clasificacion" aria-label="Resto de la clasificación">
       <div class="tabla-contenedor">
         <table class="tabla">
@@ -69,16 +58,25 @@
             <tr>
               <th scope="col">N°</th>
               <th scope="col">Nombre</th>
-              <th scope="col">Tiempo</th>
-              <th scope="col">Puntaje</th>
+              <th scope="col">Tiempo Total</th>
+              <th scope="col">Puntaje Total</th>
             </tr>
           </thead>
           <tbody id="tabla-cuerpo"></tbody>
         </table>
       </div>
     </section>
-
   </main>
+
+  <!-- NUEVO: Modal para guardar el nombre -->
+  <div id="modalNombre" class="modal-overlay">
+    <div class="modal-content">
+      <h2>¡Nivel Completado!</h2>
+      <p>Ingresa tus 4 iniciales para guardar tu puntaje:</p>
+      <input type="text" id="inputNombre" maxlength="4" placeholder="AAAA" autocomplete="off">
+      <button id="btn-guardar">GUARDAR</button>
+    </div>
+  </div>
 
   <script src="JS/leaderboard.js"></script>
 </body>

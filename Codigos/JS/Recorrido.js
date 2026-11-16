@@ -1,6 +1,6 @@
 /* ================================================================= */
 /* RECORRIDO INTERACTIVO - Menú Principal de PicoDesk                */
-/* Solo señala: Unirse a sala y Crear sala                         */
+/* Solo señala: Unirse a sala, Crear sala y Ajustes                  */
 /* ================================================================= */
 (function () {
     'use strict';
@@ -19,6 +19,11 @@
             selector: '#CrearSala',
             titulo: 'Crear sala',
             texto: 'Elegí el tamaño y un código, y compartilo con tus amigos para jugar juntos.'
+        },
+        {
+            selector: '#Ajustes',
+            titulo: 'Ajustes',
+            texto: 'Acá podés cambiar las opciones del juego a tu gusto.'
         }
     ];
 

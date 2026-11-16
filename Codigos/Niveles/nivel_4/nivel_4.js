@@ -1,21 +1,19 @@
 /* ==========================================================================
-   nivel_5.js
-   Lógica del Nivel 5: Fuente de poder y trazado de energía (Scary Maze).
+   nivel_4.js
+   Lógica del Nivel 4: Fuente de poder y trazado de energía (Scary Maze).
    ========================================================================== */
 
 (function () {
   // ==========================================
   // CONFIGURACIÓN Y ESTADO
   // ==========================================
-  const RUTA_MENU = "../../MenúPrincipal.html";
-  const RUTA_INTERMISION = "../../IntermisionesIndex.html";
-  
+
   let etapaActual = 1; // 1: Intro, 2: Drag, 3: Maze
   let tiempoInicio = null;
   let puntaje = 100;
   let componentesCompletados = 0;
   const PUNTOS_POR_ERROR = 10;
-  let timeoutFondo = null; // Para poder cancelarlo con el botón Skip
+  let timeoutFondo = null;
 
   // ==========================================
   // ELEMENTOS DEL DOM
@@ -56,16 +54,14 @@
     tiempoInicio = Date.now();
     etapaActual = 2;
 
-        // Iniciar el tutorial
+    // Iniciar el tutorial
     window.iniciarTutorial([
       {
         selector: '#lienzo-carriles',
         titulo: 'Sigue los caminos',
         texto: 'Mantén presionado el clic izquierdo y sigue las líneas negras desde el conector hacia los componentes. ¡No te salgas del carril!',
         accionEspecial: () => {
-          // Hace que el lienzo brille para indicar dónde está el minijuego
           document.getElementById('lienzo-carriles').classList.add('carril-glow');
-          // Quitar el brillo cuando el tutorial termine
           const btnTerminar = document.getElementById('tourSiguiente');
           if (btnTerminar.textContent === '¡Entendido!') {
              btnTerminar.addEventListener('click', () => {
@@ -74,21 +70,17 @@
           }
         }
       }
-    ], 'tutorial_nivel_5_visto');
+    ], 'tutorial_nivel_5_visto'); // Se mantiene la clave por si ya lo vieron
 
-    // Mostramos el botón de saltar
     btnSkip.classList.remove("oculto");
-
-    // Animación de fondos
     timeoutFondo = setTimeout(() => {
       avanzarAFondoSuperior();
     }, 3000);
   });
 
-  // Función separada para poder llamarla desde el setTimeout o desde el botón Skip
   function avanzarAFondoSuperior() {
-    clearTimeout(timeoutFondo); // Prevenimos que se ejecute dos veces
-    btnSkip.classList.add("oculto"); // Ocultamos el botón de saltar
+    clearTimeout(timeoutFondo);
+    btnSkip.classList.add("oculto");
     
     bgInclinado.classList.remove("bg-activo");
     bgSuperior.classList.add("bg-activo");
@@ -97,7 +89,6 @@
     herramientaFuente.classList.add("sugerido");
   }
 
-  // Botón para saltar animación
   btnSkip.addEventListener("click", () => {
     avanzarAFondoSuperior();
   });
@@ -176,29 +167,23 @@
   // ==========================================
   // ETAPA 3: LABERINTO (SCARY MAZE CON CANVAS)
   // ==========================================
-  
-  // DECISIÓN: Los caminos se separan más para que haya un "gap" (espacio) notorio.
-  // Todos arrancan desde la misma coordenada de inicio.
   const puntoInicio = { x: 77, y: 63 }; 
 
   const caminos = [
     {
       id: "cpu",
-      // Va hacia arriba y a la izquierda
       puntos: [{x: 77, y: 63}, {x: 77, y: 35}, {x: 60, y: 35}, {x: 60, y: 25}, {x: 35, y: 25}],
       completado: false,
       path2D: new Path2D()
     },
     {
       id: "ram",
-      // Va hacia abajo y a la izquierda (por debajo de las otras)
       puntos: [{x: 77, y: 63}, {x: 77, y: 75}, {x: 25, y: 75}],
       completado: false,
       path2D: new Path2D()
     },
     {
       id: "sata",
-      // Va hacia abajo, dobla a la izquierda y vuelve a bajar
       puntos: [{x: 77, y: 63}, {x: 77, y: 88}, {x: 55, y: 88}, {x: 55, y: 95}, {x: 35, y: 95}],
       completado: false,
       path2D: new Path2D()
@@ -207,23 +192,19 @@
 
   let dibujando = false;
   let caminoActivo = null;
-  let trail = []; // Guarda los puntos exactos que el usuario va trazando
-  let animacionFrame; // Para el parpadeo del punto de inicio
+  let trail = [];
+  let animacionFrame;
 
-  // Convierte porcentajes (0-100) a píxeles reales del canvas
   function pctAPx(pct, dimension) {
     return (pct / 100) * dimension;
   }
 
   function iniciarJuegoCarriles() {
     lienzo.classList.add("activo");
-    
-    // Ajustamos el tamaño real del canvas al del contenedor
     const rect = fondoMarco.getBoundingClientRect();
     lienzo.width = rect.width;
     lienzo.height = rect.height;
 
-    // Generamos los objetos Path2D para cada camino
     caminos.forEach(c => {
       c.path2D = new Path2D();
       c.puntos.forEach((pt, i) => {
@@ -234,17 +215,14 @@
       });
     });
 
-    // Iniciamos el bucle de dibujo (para el punto de inicio pulsante)
     dibujarLoop();
   }
 
   function dibujarLoop() {
     ctx.clearRect(0, 0, lienzo.width, lienzo.height);
     
-    // 1. Dibujar carriles base (los que no están completados)
     caminos.forEach(camino => {
       if (camino.completado) {
-        // Si está completado, lo dibujamos verde permanente
         ctx.beginPath();
         camino.puntos.forEach((pt, i) => {
           const x = pctAPx(pt.x, lienzo.width);
@@ -256,7 +234,6 @@
         ctx.lineWidth = 12;
         ctx.stroke();
       } else {
-        // Si no, lo dibujamos negro con un borde gris para que se vea bien
         ctx.beginPath();
         camino.puntos.forEach((pt, i) => {
           const x = pctAPx(pt.x, lienzo.width);
@@ -267,7 +244,6 @@
         ctx.strokeStyle = "#1a1a1a";
         ctx.lineWidth = 12;
         ctx.stroke();
-        // Borde sutil
         ctx.strokeStyle = "#444";
         ctx.lineWidth = 25;
         ctx.globalCompositeOperation = "destination-over";
@@ -276,48 +252,41 @@
       }
     });
 
-    // 2. Dibujar Punto de Inicio Pulsante
-    // DECISIÓN: Hacemos un círculo amarillo que late para que el usuario sepa dónde empezar a arrastrar
     const startX = pctAPx(puntoInicio.x, lienzo.width);
     const startY = pctAPx(puntoInicio.y, lienzo.height);
-    const pulso = Math.sin(Date.now() / 200) * 4; // Oscila entre -4 y 4
+    const pulso = Math.sin(Date.now() / 200) * 4;
 
     ctx.beginPath();
     ctx.arc(startX, startY, 15 + pulso, 0, Math.PI * 2);
-    ctx.fillStyle = "rgba(224, 178, 61, 0.7)"; // Amarillo
+    ctx.fillStyle = "rgba(224, 178, 61, 0.7)";
     ctx.fill();
     ctx.strokeStyle = "#fff";
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // 3. Dibujar el trazo que está haciendo el usuario actualmente
     if (dibujando && trail.length > 0) {
       ctx.beginPath();
       ctx.moveTo(trail[0].x, trail[0].y);
       for (let pt of trail) {
         ctx.lineTo(pt.x, pt.y);
       }
-      // Color verde neón brillante
       ctx.strokeStyle = "#00ff00"; 
       ctx.lineWidth = 8;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
-      // Efecto de resplandor
       ctx.shadowColor = "#00ff00";
       ctx.shadowBlur = 15;
       ctx.stroke();
-      // Reseteamos la sombra para no afectar otros dibujos
       ctx.shadowBlur = 0;
     }
 
     animacionFrame = requestAnimationFrame(dibujarLoop);
   }
 
-  // Verifica si el mouse está cerca del punto de inicio
   function estaCercaDelInicio(x, y) {
     const startX = pctAPx(puntoInicio.x, lienzo.width);
     const startY = pctAPx(puntoInicio.y, lienzo.height);
-    return Math.hypot(x - startX, y - startY) < 40; // 40px de tolerancia
+    return Math.hypot(x - startX, y - startY) < 40;
   }
 
   lienzo.addEventListener("pointerdown", (e) => {
@@ -327,7 +296,6 @@
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
 
-    // Solo podemos empezar si clickeamos cerca del conector
     if (estaCercaDelInicio(mouseX, mouseY)) {
       dibujando = true;
       trail = [{ x: mouseX, y: mouseY }];
@@ -341,57 +309,41 @@
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
 
-    // DECISIÓN: isPointInStroke nos permite saber si el mouse está sobre el "camino".
-    // Hacemos que el trazo temporal sea grueso (35px) para que sea indulgente si el jugador se sale un poquito.
     ctx.lineWidth = 40; 
-    
     let enAlgunCamino = null;
     
-    // Recorremos todos los caminos para ver si el mouse toca alguno
     for (let c of caminos) {
       if (c.completado) continue;
-      
       if (ctx.isPointInStroke(c.path2D, mouseX, mouseY)) {
         enAlgunCamino = c;
-        break; // Ya lo encontramos, dejamos de buscar
+        break;
       }
     }
 
     if (enAlgunCamino) {
-      // ¡Está sobre un camino válido!
-      
-      // Prevenimos que el jugador haga "trampa" moviendo el mouse de golpe al final.
-      // Verificamos que no se haya teletransportado lejos del último punto registrado.
       const ultimoPunto = trail[trail.length - 1];
       const distanciaAlUltimo = Math.hypot(mouseX - ultimoPunto.x, mouseY - ultimoPunto.y);
       
       if (distanciaAlUltimo < 60) {
         trail.push({ x: mouseX, y: mouseY });
-        
-        // ¿Llegó al final del camino?
         const fin = enAlgunCamino.puntos[enAlgunCamino.puntos.length - 1];
         const finX = pctAPx(fin.x, lienzo.width);
         const finY = pctAPx(fin.y, lienzo.height);
         
         if (Math.hypot(mouseX - finX, mouseY - finY) < 40) {
-          // ¡COMPLETADO!
           completarCamino(enAlgunCamino);
         }
       }
     } else {
-      // FALLÓ (se salió del carril)
       dibujando = false;
       trail = [];
       puntaje -= PUNTOS_POR_ERROR;
-      
-      // Efecto visual de error: flash rojo
       lienzo.style.backgroundColor = "rgba(255, 0, 0, 0.4)";
       setTimeout(() => { lienzo.style.backgroundColor = "transparent"; }, 200);
     }
   });
 
   lienzo.addEventListener("pointerup", () => {
-    // Si suelta el mouse antes de llegar al final, se reinicia el trazo
     if (dibujando) {
       dibujando = false;
       trail = [];
@@ -429,7 +381,7 @@
     const puntajeFinal = Math.max(0, puntaje);
 
     const resultado = {
-      nivel: 5,
+      nivel: 4, // CORRECCIÓN: Ahora guarda correctamente el Nivel 4
       puntaje: puntajeFinal,
       tiempoMs: tiempoTotalMs,
       tiempoTexto: tiempoTexto,
@@ -438,7 +390,7 @@
     sessionStorage.setItem("resultadoNivel", JSON.stringify(resultado));
 
     setTimeout(() => {
-      window.location.href = RUTA_INTERMISION;
+      window.location.href = "../../IntermisionesIndex.html";
     }, 1500);
   }
 
@@ -456,17 +408,15 @@
   });
 
   btnSi.addEventListener("click", () => {
-    window.location.href = RUTA_MENU;
+    window.location.href = "../../MenúPrincipal.html";
   });
 
-  // Ajustar Canvas al redimensionar ventana
   window.addEventListener("resize", () => {
     if (etapaActual === 3) {
       const rect = fondoMarco.getBoundingClientRect();
       lienzo.width = rect.width;
       lienzo.height = rect.height;
       
-      // Recreamos los Path2D con las nuevas dimensiones
       caminos.forEach(c => {
         c.path2D = new Path2D();
         c.puntos.forEach((pt, i) => {
