@@ -3,6 +3,8 @@
    Estilos para el tutorial paso a paso de los niveles.
    ========================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&display=swap');
+
 .tour-bloqueo {
   position: fixed;
   inset: 0;
