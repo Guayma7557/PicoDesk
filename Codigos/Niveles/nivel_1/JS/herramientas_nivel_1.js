@@ -334,6 +334,10 @@
     item.addEventListener("pointerdown", (evento) => iniciarArrastre(item, evento));
   });
 
+  itemDestornillador.addEventListener("click", () => {
+    itemDestornillador.classList.toggle("agarrando");
+  });
+
   // Pista inicial: al entrar al nivel, la primera herramienta a usar es
   // "placa-madre".
   actualizarSugerenciaHerramienta();
