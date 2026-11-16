@@ -1,0 +1,425 @@
+/* ==========================================================================
+   nivel_5.css
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&display=swap');
+
+:root {
+  --ColorPrimario: #477F90;
+  --ColorSecundario: #A44545;
+  --ColorTerciario: #404040;
+  --ColorCuarto: #303030;
+  --ColorQuinto: #E8E7E4;
+  --color-fondo: #555555;
+  --color-progreso-vacio: #3a3a3a;
+  --color-progreso-relleno: #e0b23d;
+  --fuente-pixel: "Press Start 2P", "DotGothic16", monospace;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'DotGothic16', sans-serif;
+  background-color: var(--color-fondo);
+  color: var(--ColorQuinto);
+}
+
+.oculto { display: none !important; }
+
+/* ==========================================================================
+   INTRODUCCIÓN
+   ========================================================================== */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(48, 48, 48, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  cursor: pointer;
+  padding: 1rem;
+}
+
+.intro-contenido {
+  background-color: var(--ColorTerciario);
+  border: 3px solid var(--ColorQuinto);
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 600px;
+  text-align: center;
+}
+
+.icono-intro {
+  width: 100px;
+  height: auto;
+  margin-bottom: 1rem;
+  image-rendering: pixelated;
+}
+
+.intro-contenido h1 {
+  font-family: 'VT323', monospace;
+  font-size: 3rem;
+  color: var(--ColorPrimario);
+  margin-bottom: 1rem;
+}
+
+.intro-contenido p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.instruccion-click {
+  color: var(--color-progreso-relleno);
+  animation: pulso 1.5s infinite;
+}
+
+/* ==========================================================================
+   JUEGO PRINCIPAL Y FONDOS
+   ========================================================================== */
+.pantalla-niveles {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* NUEVO: Botón para saltar la animación de fondos */
+.btn-skip {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: var(--ColorQuinto);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--fuente-pixel);
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+.btn-skip:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.fondo-marco {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  max-width: calc(100vh * (521 / 260));
+  max-height: calc(100vw * (260 / 521));
+  aspect-ratio: 521 / 260;
+  z-index: 1;
+}
+
+.fondo-capa {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  transition: opacity 1s ease;
+  image-rendering: pixelated;
+}
+
+.fondo-capa.bg-activo {
+  opacity: 1;
+}
+
+#lienzo-carriles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+#lienzo-carriles.activo {
+  pointer-events: auto;
+  opacity: 1;
+  cursor: crosshair;
+}
+
+/* ==========================================================================
+   ZONA DE DROP (DONDE VA LA FUENTE)
+   ========================================================================== */
+.zona-fuente {
+  position: absolute;
+  top: 54%;
+  left: 73%;
+  width: 10%;
+  height: 16%;
+  border: 3px dashed rgba(255, 255, 255, 0.5);
+  background-color: transparent;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.zona-fuente.activa {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.zona-fuente.zona-hover {
+  border-color: var(--color-progreso-relleno);
+  box-shadow: 0 0 15px rgba(224, 178, 61, 0.6) inset;
+}
+
+.zona-fuente.completada {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   BARRA DE HERRAMIENTAS
+   ========================================================================== */
+.barra-herramientas {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  transition: opacity 0.5s;
+}
+
+.barra-herramientas.oculto {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.barra-herramientas__item {
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: #2a2a2a;
+  border: 2px dashed #666666;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+  touch-action: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.barra-herramientas__item:active { cursor: grabbing; }
+
+.barra-herramientas__item img {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+.barra-herramientas__item.sugerido {
+  border-color: var(--color-progreso-relleno);
+  border-style: solid;
+  box-shadow: 0 0 10px 2px rgba(224, 178, 61, 0.65);
+  animation: pulso-sugerencia 1.4s ease-in-out infinite;
+}
+
+.barra-herramientas__item.agarrando {
+  border-color: #6fcf6f;
+  border-style: solid;
+  box-shadow: 0 0 10px rgba(111, 207, 111, 0.8);
+}
+
+.arrastre-fantasma {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 200;
+  image-rendering: pixelated;
+}
+
+/* ==========================================================================
+   PANEL DE MISIONES Y PROGRESO
+   ========================================================================== */
+.panel-misiones {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  z-index: 10;
+  width: 250px;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.panel-misiones__titulo {
+  font-family: 'VT323', monospace;
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.panel-misiones__lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mision {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.mision.oculta { display: none; }
+
+.mision__marca {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--color-progreso-relleno);
+  border-radius: 3px;
+  position: relative;
+}
+
+.mision.completada { color: #6fcf6f; }
+.mision.completada .mision__marca {
+  border-color: #6fcf6f;
+  background-color: #6fcf6f;
+}
+.mision.completada .mision__marca::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(14% 44%, 0 63%, 39% 100%, 100% 20%, 82% 4%, 37% 72%);
+  background-color: #1a1a1a;
+}
+
+.barra-lateral {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.boton-salir {
+  width: 2.5rem;
+  height: 3.5rem;
+  background-color: var(--ColorSecundario);
+  border: none;
+  clip-path: polygon(100% 0%, 100% 100%, 0% 50%);
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   BARRA DE PROGRESO (Estandarizada al Nivel 6)
+   ========================================================================== */
+.barra-progreso {
+  width: 1rem;
+  height: 70vh; /* Unificado */
+  background-color: var(--ColorTerciario); /* Unificado al color de Nivel 6 */
+  clip-path: polygon(0% 0%, 100% 3%, 100% 100%, 0% 96%);
+  overflow: hidden;
+  position: relative;
+}
+
+.barra-progreso__relleno {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--progreso, 0%);
+  background-color: var(--ColorQuinto); /* Unificado al color de Nivel 6 */
+  transition: height 0.3s ease; /* Animación agregada */
+}
+
+/* ==========================================================================
+   MODAL Y ANIMACIONES
+   ========================================================================== */
+.overlay-confirmacion {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+}
+.overlay-confirmacion.is-visible { display: flex; }
+
+.dialogo-confirmacion {
+  background-color: var(--ColorTerciario);
+  border: 2px solid var(--ColorSecundario);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  text-align: center;
+  border-radius: 8px;
+}
+.dialogo-confirmacion__texto {
+  font-family: 'VT323', monospace;
+  font-size: 2rem;
+}
+.dialogo-confirmacion__opciones { display: flex; gap: 2rem; }
+.dialogo-confirmacion__no {
+  background-color: var(--ColorSecundario);
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  font-family: 'DotGothic16', sans-serif;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.dialogo-confirmacion__si {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-family: 'DotGothic16', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+@keyframes pulso {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.05); }
+}
+
+@keyframes pulso-sugerencia {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(224, 178, 61, 0.55), 0 0 6px 1px rgba(224, 178, 61, 0.5); }
+  50% { box-shadow: 0 0 0 3px rgba(224, 178, 61, 0.85), 0 0 14px 4px rgba(224, 178, 61, 0.85); }
+}
