@@ -720,7 +720,6 @@ div.barra-herramientas__item {
   border-style: solid;
   box-shadow: 0 0 10px rgba(111, 207, 111, 0.8);
   animation: none;
-  transition: 1s;
 }
 
 /* Pulso de la herramienta sugerida (ver .barra-herramientas__item--sugerido) */
