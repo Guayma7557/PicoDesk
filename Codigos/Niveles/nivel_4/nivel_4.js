@@ -167,24 +167,24 @@
   // ==========================================
   // ETAPA 3: LABERINTO (SCARY MAZE CON CANVAS)
   // ==========================================
-  const puntoInicio = { x: 77, y: 63 }; 
+  const puntoInicio = { x: 55, y: 50 }; 
 
   const caminos = [
     {
       id: "cpu",
-      puntos: [{x: 77, y: 63}, {x: 77, y: 35}, {x: 60, y: 35}, {x: 60, y: 25}, {x: 35, y: 25}],
+      puntos: [{x: 55, y: 50}, {x: 55, y: 20}, {x: 35, y: 20}],
       completado: false,
       path2D: new Path2D()
     },
     {
       id: "ram",
-      puntos: [{x: 77, y: 63}, {x: 77, y: 75}, {x: 25, y: 75}],
+      puntos: [{x: 55, y: 55}, {x: 65, y: 65}, {x: 70, y: 65}],
       completado: false,
       path2D: new Path2D()
     },
     {
       id: "sata",
-      puntos: [{x: 77, y: 63}, {x: 77, y: 88}, {x: 55, y: 88}, {x: 55, y: 95}, {x: 35, y: 95}],
+      puntos: [{x: 55, y: 55}, {x: 40, y: 55}, {x: 55, y: 88}, {x: 55, y: 95}, {x: 35, y: 95}],
       completado: false,
       path2D: new Path2D()
     }
